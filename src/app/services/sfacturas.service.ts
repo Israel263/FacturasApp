@@ -32,4 +32,13 @@ export class SFacturasService {
   eliminarCliente(idCliente:number){
     return this.http.delete<boolean>(this.url+"/EliminarCliente/"+idCliente)
   }
+  //FACTURAS----------------------------------------------------------------------
+  retornarFactura(id_fac:number){
+    //TODO: Verificar el servicio
+    return this.http.get<Facturas>(this.url+"/ObtenerFactura/"+id_fac)
+  }
+  retornarDetalles(id_fac:number){
+    //TODO: Verificar el servicio
+    return this.http.get<DetFacturas[]>(this.url+"/ObtenerDetFactura/"+id_fac)
+  }
 }

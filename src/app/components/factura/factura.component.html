@@ -5,7 +5,7 @@
             <h1 class="page-title text-secondary-d1">
                 Factura
                 <small class="page-info">
-                    : 111-222
+                    : {{factura?.Id_Fac}}
                 </small>
             </h1>
     
@@ -43,18 +43,18 @@
                         <div class="col-sm-4">
                             <div>
                                 <span class="text-sm text-grey-m2 align-middle">Cliente: </span>
-                                <span class="text-600 text-110 text-blue align-middle">Alex Doe</span>
+                                <span class="text-600 text-110 text-blue align-middle">{{cliente?.Nombre}} {{cliente?.Apellido}}</span>
                             </div>
                             <div>
                                 <span class="text-sm text-grey-m2 align-middle">Ruc: </span>
-                                <span class="text-600 text-110 text-blue align-middle">1851017853</span>
+                                <span class="text-600 text-110 text-blue align-middle">{{cliente?.Cedula}}</span>
                             </div>
                             <div class="text-grey-m2">
                                 <div class="my-1">
-                                    Ambato - Ecuador
+                                    {{cliente?.Ciudad}} - Ecuador
                                 </div>
                                 <div class="my-1"><i class="fa fa-phone fa-flip-horizontal text-secondary"></i> <b
-                                        class="text-600"> 0987677655</b></div>
+                                        class="text-600"> {{cliente?.Telefono}}</b></div>
                             </div>
                         </div>
                         <!-- /.col -->
@@ -67,10 +67,10 @@
                                 </div>
     
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
-                                        class="text-600 text-90">ID:</span> 111-222</div>
+                                        class="text-600 text-90">ID:</span> {{factura?.Id_Fac}}</div>
     
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
-                                        class="text-600 text-90">Fecha de emisión:</span> Oct 12, 2019</div>
+                                        class="text-600 text-90">Fecha de emisión:</span> {{factura?.Fecha}}</div>
     
                             </div>
                         </div>
@@ -114,21 +114,13 @@
                                 </thead>
     
                                 <tbody class="text-95 text-secondary-d3">
-                                    <tr></tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Domain registration</td>
-                                        <td>2</td>
-                                        <td class="text-95">$10</td>
-                                        <td class="text-secondary-d2">$20</td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Domain registration</td>
-                                        <td>2</td>
-                                        <td class="text-95">$10</td>
-                                        <td class="text-secondary-d2">$20</td>
-                                    </tr>
+                                    <tr *ngFor="let detalle of detFactura">
+                                        <td>{{detalle.Id_Det_Fac}}</td>
+                                        <td>{{obtenerProducto(detalle.Id_Pro_Per,true)}}</td>
+                                        <td>{{detalle.Cantidad}}</td>
+                                        <td class="text-95">${{obtenerProducto(detalle.Id_Pro_Per,false)}}</td>
+                                        <td class="text-secondary-d2">${{detalle.Subtotal}}</td>
+                                    </tr>                                    
                                 </tbody>
                             </table>
                         </div>
@@ -146,7 +138,7 @@
                                         </strong>
                                     </div>
                                     <div class="col-5">
-                                        <span class="text-150 text-success-d3 opacity-2">$2,475</span>
+                                        <span class="text-150 text-success-d3 opacity-2">${{factura?.Total}}</span>
                                     </div>
                                 </div>
                             </div>

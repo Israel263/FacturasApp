@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SFacturasService } from '../../services/sfacturas.service';
 import { Clientes, Productos, ProductosOrden } from '../../Models/Entities.model';
+import { Router } from '@angular/router';
 import { BuscarClienteComponent } from '../buscar-cliente/buscar-cliente.component';
 
 @Component({
@@ -17,7 +18,7 @@ export class HomeComponent implements OnInit {
   buscarProductos: boolean = false;
   cliente?: Clientes;
 
-  constructor(private sFacturas: SFacturasService) { }
+  constructor(private sFacturas: SFacturasService, private ruta: Router) { }
 
   ngOnInit(): void {
     this.sFacturas.retornarProductos()
@@ -96,6 +97,10 @@ export class HomeComponent implements OnInit {
       });
     }
     this.actualizarTotal();
+  }
+
+  IrFactura(){
+    this.ruta.navigate(['/factura'])
   }
 
 

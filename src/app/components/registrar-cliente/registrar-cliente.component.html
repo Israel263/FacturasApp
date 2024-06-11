@@ -1,30 +1,31 @@
 <div id="DeFondo">
     <h1 class="text-warning text-center m-5 font-weight-bold">REGISTRO DE CLIENTES</h1>
     <div class='contenedor'>
-        <form>
+        <form (submit)="CrearCliente()">
             <h2 class="text-center">Nuevo Cliente</h2>
             <p>Ingrese su cedula: </p>
             <div class='input-box'>
-                <input type="text" maxlength="10" placeholder='Ej. 185026...' required />
+                <input type="text" minlength="10" maxlength="10" placeholder='Ej. 185026...' required  [(ngModel)]="clienteCrear.Cedula" name="cedula"
+                pattern="[0-9]{10}" title="solo numeros"/>                
             </div>
             <p>Ingrese su nombre: </p>
             <div class='input-box'>
-                <input type="text" maxlength="20" placeholder='Ej. Juan' required />
+                <input type="text" maxlength="10" placeholder='Ej. Juan' required [(ngModel)]="clienteCrear.Nombre" name="nombre"/>
             </div>
             <p>Ingrese su apellido: </p>
             <div class='input-box'>
-                <input type="text" maxlength="20" placeholder='Ej. Perez' required />
+                <input type="text" maxlength="10" placeholder='Ej. Perez' required [(ngModel)]="clienteCrear.Apellido" name="apellido"/>
             </div>
             <p>Ingrese la ciudad en donde vive: </p>
             <div class='input-box'>
-                <input type="text" maxlength="20" placeholder='Ej. Ambato' required />
+                <input type="text" maxlength="20" placeholder='Ej. Ambato' required [(ngModel)]="clienteCrear.Ciudad" name="ciudad"/>
             </div>
             <p>Ingrese su telefono: </p>
             <div class='input-box'>
-                <input type="text" maxlength="20" placeholder='Ej. 09346828374' required />
+                <input type="text" maxlength="10" placeholder='Ej. 09346828374' required  [(ngModel)]="clienteCrear.Telefono" name="telefono"/>
             </div>
-            <button type="submit" id="btn_Crear" class="btn btn-success m-1">Crear</button>            
-            <button type="button" id="btn_Cancelar" class="btn btn-danger m-1">Cancelar</button>
+            <button type="submit" id="btn_Crear" class="btn btn-success m-1" >Crear</button>            
+            <button type="button" id="btn_Cancelar" class="btn btn-danger m-1" (click)="rutar.navigateByUrl('/login')">Cancelar</button>
         </form>
     </div>
 </div>

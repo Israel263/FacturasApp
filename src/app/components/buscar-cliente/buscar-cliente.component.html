@@ -5,30 +5,19 @@
             <h1 class="text-center col-6">Seleccionar Cliente</h1>
             <div class="col-2"></div>
             <input type="button" class="btn-close btn-close-white col-1" aria-label="Close" (click)="cerrar.emit(false)">
-        </div>
-        <div class="row">
-            <h2>Buscar por: </h2>
-        </div>
-        <div class="row">
-            <span class="col-2"><input type="radio" value="1" name="buscarCliente" [(ngModel)]="seleccionBuscar">Id</span>
-            <span class="col-2"><input type="radio" value="2" name="buscarCliente" [(ngModel)]="seleccionBuscar">Nombre</span>
-            <span class="col-2"><input type="radio" value="3" name="buscarCliente" [(ngModel)]="seleccionBuscar">Apellido</span>
-            <span class="col-2"><input type="radio" value="4" name="buscarCliente" [(ngModel)]="seleccionBuscar">Cedula</span>
-            <span class="col-2"><input type="radio" value="5" name="buscarCliente" [(ngModel)]="seleccionBuscar">Ciudad</span>
-            <span class="col-2"><input type="radio" value="6" name="buscarCliente" [(ngModel)]="seleccionBuscar">Telefono</span>
-        </div>
+        </div>        
         <div class="row my-3">
-            <div class="col-1"></div>
-            <input class="col-8 py-3 " type="text" name="buscarCli" placeholder="Buscar..." [(ngModel)]="filtro">
-            <input type="button" class="col-2 btn btn-primary my-2 my-sm-0" value="Buscar" (click)="BuscarClientes()">
+            <span class="col-1"></span>
+            <input class="py-3 barra col-9" type="text" name="buscarCli" placeholder="Buscar..." [(ngModel)]="filtro" (keyup)="BuscarClientes()"> 
+            <span class="col-1 h5 text-center justify-content-center"><input type="checkbox" name="buscarId" [(ngModel)]="buscarPorId" (change)="BuscarClientes()">Id?</span>
         </div>
         <div class="row">
             <div class="col-1"></div>
-            <div class="col-10">
+            <div class="col-10 table-responsive tabla_bonita overFlow">
 
-                <table class="table table-hover text-center my-3">
+                <table class="tabla">
                     <thead>
-                        <tr>
+                        <tr class="filaPrincipal">
                             <th scope="col">Id</th>
                             <th scope="col">Cedula</th>
                             <th scope="col">Nombre</th>
@@ -36,10 +25,11 @@
                             <th scope="col">Ciudad</th>
                             <th scope="col">Telefono</th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let cli of listaFiltradaClientes">
+                        <tr *ngFor="let cli of listaFiltradaClientes | paginate: { itemsPerPage: 4, currentPage: p }" class="fila">
                             <th scope="row">{{cli.Id_Cli}}</th>
                             <th>{{cli.Cedula}}</th>
                             <th>{{cli.Nombre}}</th>
@@ -47,14 +37,16 @@
                             <th>{{cli.Ciudad}}</th>
                             <th>{{cli.Telefono}}</th>
                             <th><input type="radio" name="listadoCli" [value]="cli" [(ngModel)]="clienteSeleccionado"></th>
+                            <th><i class="bi bi-trash btn btn-danger h6" (click)="EliminarCliente(cli.Id_Cli)"></i></th>
                         </tr>
                     </tbody>
                 </table>
             </div>
+            <pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls>
         </div>
         <div class="row">
             <div class="col-3"></div>
-            <input class="col-6 p-3 btn btn-success" type="button" value="Aceptar" (click)="AceptarCliente()">
+            <input class="col-6 p-3 buscar my-1" type="button" value="Aceptar" (click)="AceptarCliente()">
         </div>
     </div>
 </div>

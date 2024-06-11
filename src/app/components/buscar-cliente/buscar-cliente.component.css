@@ -17,3 +17,7 @@
     align-items: center;
     margin-top:5% ;
 }
+.overFlow{
+    max-height:40vh; 
+    overflow-y: auto;
+}

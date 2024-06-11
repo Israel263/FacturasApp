@@ -5,52 +5,46 @@
             <h1 class="text-center col-6">Buscar Productos</h1>
             <div class="col-2"></div>
             <input type="button" class="btn-close btn-close-white col-1" aria-label="Close" (click)="cerrar.emit(false)">
-        </div>
-        <div class="row">
-            <h2>Buscar por: </h2>
-        </div>
-        <div class="row">
-            <span class="col-3"><input type="radio" value="1" name="buscarProducto" [(ngModel)]="seleccionBuscar">Id</span>
-            <span class="col-3"><input type="radio" value="2" name="buscarProducto" [(ngModel)]="seleccionBuscar">Nombre</span>
-            <span class="col-3"><input type="radio" value="3" name="buscarProducto" [(ngModel)]="seleccionBuscar">Marca</span>                        
-            <span class="col-3"><input type="radio" value="4" name="buscarProducto" [(ngModel)]="seleccionBuscar">Precio</span>
-        </div>
+        </div>                
         <div class="row my-3">
             <div class="col-1"></div>
-            <input class="col-8 py-3 " type="text" name="buscarPro" placeholder="Buscar..." [(ngModel)]="filtro">
-            <input type="button" class="col-2 btn btn-primary my-2 my-sm-0" value="Buscar" (click)="BuscarProductos()">
+            <input class="col-9 py-3 barra " type="text" name="buscarPro" placeholder="Buscar..." [(ngModel)]="filtro" (keyup)="BuscarProductos()">
+            <span class="col-2 text-center"><input type="checkbox" name="porId" [(ngModel)]="buscarPorId" (change)="BuscarProductos()">Por Id?</span>
         </div>
         <div class="row">
             <div class="col-1"></div>
-            <div class="col-10">
+            <div class="col-10 overFlow tabla_bonita">
 
-                <table class="table table-hover text-center my-3">
+                <table class="tabla">
                     <thead>
-                        <tr>
+                        <tr class="filaPrincipal">
                             <th scope="col">Id</th>
                             <th scope="col">Nombre</th>
                             <th scope="col">Marca</th>
-                            <th scope="col">Precio</th>
                             <th scope="col">Stock</th>                            
+                            <th scope="col">Precio</th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let productoFiltrado of listaProductosFiltrados">
+                        <tr *ngFor="let productoFiltrado of listaProductosFiltrados | paginate: { itemsPerPage: 4, currentPage: p }" class="fila">
                             <th scope="row">{{productoFiltrado.Id_Pro}}</th>
                             <th>{{productoFiltrado.Nombre}}</th>
                             <th>{{productoFiltrado.Marca}}</th>
-                            <th>{{productoFiltrado.Precio}}</th>
                             <th>{{productoFiltrado.Stock}}</th>                            
+                            <th>{{productoFiltrado.Precio.toFixed(2)}}</th>
                             <th><input type="checkbox" name="listadoProd" (change)="actualizarEstadoProducto(productoFiltrado.Id_Pro, $event)" [(ngModel)]="productoFiltrado.Seleccionado"></th>
+                            <th><i class="bi bi-trash btn btn-danger h6" (click)="EliminarProducto(productoFiltrado.Id_Pro)"></i></th>
                         </tr>
                     </tbody>
                 </table>
             </div>
+            <pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls>
         </div>
         <div class="row">
             <div class="col-3"></div>
-            <input class="col-6 p-3 btn btn-success" type="button" value="Aceptar" (click)="enviarProductos()">
+            <input class="col-6 p-3 buscar my-1" type="button" value="Aceptar" (click)="enviarProductos()">
         </div>
     </div>
 </div>

@@ -3,31 +3,35 @@
         <div class="col-6" id="listaProductos">
             <div id="headClaro">
                 <div class="row">
-                    <h1 class="text-center mt-5 mb-3">Lista de Productos</h1>
+                    <a href="/login" class="col-1 btn btn-secondary mx-3 mt-1 text-bold" id="regresar"><i
+                            class="bi bi-arrow-return-left"></i></a>
+                    <h1 class="text-center mt-3 mb-3 col-10">Lista de Productos</h1>
                 </div>
                 <div class="row">
                     <div class="col-2"></div>
                     <div class="col-4">
-                        <input class="btn btn-dark px-5 py-1 mb-3" type="button" value="Seleccionar Cliente" (click)="buscarClientes=true">
+                        <input class="btn btn-dark px-5 py-1 mb-3" type="button" value="Seleccionar Cliente"
+                            (click)="buscarClientes=true">
                     </div>
                     <div class="col-1"></div>
                     <div class="col-4">
-                        <input class="btn btn-dark px-5 py-1 mb-3" type="button" value="Buscar Productos" (click)="buscarProductos=true">
+                        <input class="btn btn-dark px-5 py-1 mb-3" type="button" value="Buscar Productos"
+                            (click)="buscarProductos=true">
                     </div>
                 </div>
             </div>
             <p class="my-3 h6 text-center">Por favor escoga los productos a comprar: </p>
             <div class="row">
                 <div class="col-1"></div>
-                <div class="col-10">
+                <div class="col-10 cuerpoTabla">
 
-                    <table class="table table-hover table-dark text-center">
+                    <table class="table table-hover table-dark text-justify">
                         <thead>
                             <tr>
                                 <th scope="col">Numero</th>
                                 <th scope="col">Nombre del Producto</th>
-                                <th scope="col">Precio</th>
                                 <th scope="col">Stock</th>
+                                <th scope="col">Precio</th>
                                 <th scope="col">Seleccionado</th>
                             </tr>
                         </thead>
@@ -35,10 +39,11 @@
                             <tr *ngFor="let product of listaProductos">
                                 <th scope="row">{{product.Id_Pro}}</th>
                                 <th>{{product.Nombre}}</th>
-                                <th>{{product.Precio}}</th>
                                 <th>{{product.Stock}}</th>
+                                <th>${{product.Precio.toFixed(2)}}</th>
                                 <th><input type="checkbox" name="selecProd" id="" value="1"
-                                        [(ngModel)]="product.Seleccionado" (change)="actualizarOrdenVenta($event, product.Id_Pro)"></th>
+                                        [(ngModel)]="product.Seleccionado"
+                                        (change)="actualizarOrdenVenta($event, product.Id_Pro)"></th>
                             </tr>
                         </tbody>
                     </table>
@@ -46,19 +51,28 @@
             </div>
         </div>
         <div class="col-6" id="ordenVenta">
-            <div class="row" id="headOscuro">
-                <h1 class="text-center mt-5 mb-3 text-white">Orden de Venta</h1>
-                <h3 class="text-white text-center m-1"><strong>Cliente: </strong> {{cliente==null?'No se ha seleccionado un cliente':''}} {{cliente?.Nombre}} {{cliente?.Apellido}}</h3>
+            <div class="row py-1" id="headOscuro">
+                <h1 class="text-center mt-3 text-white">Orden de Venta</h1>
+                <h6 class="text-white mx-5 my-1 col-4">Orden N: #00{{numeroOrden+1}} </h6>
+                <h6 class="text-white mx-5 my-1 col-4">Fecha: {{fechaFormateada}}</h6>
+                <h6 class="text-white text-justify m-1 mx-5 my-1"><strong>Cliente: </strong> {{cliente==null?'No se ha seleccionado
+                    un cliente':''}} {{cliente?.Nombre}} {{cliente?.Apellido}}</h6>
+                    <div *ngIf="cliente" class="row">
+                        <h6 class="text-white mx-5 my-1 col-4"><strong>Cedula: </strong> {{cliente.Cedula}} </h6>
+                        <h6 class="text-white mx-5 my-1 col-4"><strong>Ciudad: </strong> {{cliente.Ciudad}} - Ecuador</h6>
+                        <h6 class="text-white mx-5 my-1"><strong>Telefono: </strong> {{cliente.Telefono}} </h6>
+                    </div>
             </div>
             <h6 class=" text-white text-center mt-3 mb-1">Aquí puede editar los productos a comprar</h6>
             <div class="row">
                 <div class="col-1"></div>
-                <div class="col-10">
-                    <table class="table table-hover text-center my-3">
+                <div class="col-10 cuerpoTabla">
+                    <table class="table table-hover my-3">
                         <thead>
                             <tr>
                                 <th>Id</th>
                                 <th>Producto</th>
+                                <th>Precio</th>
                                 <th>Cantidad</th>
                                 <th>Subtotal</th>
                                 <th></th>
@@ -68,30 +82,45 @@
                             <tr *ngFor="let orden of listaProductosOrden">
                                 <th>{{orden.Id_Pro}}</th>
                                 <th>{{orden.Nombre}}</th>
-                                <th><input class="text-center" type="number" name="" min="1" [max]="orden.Stock" value="1"
-                                        [(ngModel)]="orden.Cantidad" (input)="actualizarSubtotal(orden.Id_Pro)" maxLength="1"></th>
-                                <th>{{orden.Subtotal}}</th>
-                                <th><input type="button" class="btn btn-danger px-3 py-1" value="Eliminar" (click)="eliminarProductoOrden(orden.Id_Pro)"></th>
-                            </tr>                            
+                                <th>{{orden.Precio}}</th>
+                                <th><input class="text-center" type="number" name="" min="1" [max]="orden.Stock"
+                                        value="1" [(ngModel)]="orden.Cantidad"
+                                         (keydown)="validarInput($event, orden.Stock, orden)" (keyup)="actualizarSubtotal(orden.Id_Pro)" (input)="actualizarSubtotal(orden.Id_Pro)"></th>
+                                <th>${{orden.Subtotal.toFixed(2)}}</th>
+                                <th><input type="button" class="btn btn-danger px-3 py-1" value="Eliminar"
+                                        (click)="eliminarProductoOrden(orden.Id_Pro)"></th>
+                            </tr>
                             <tr>
                                 <th></th>
                                 <th></th>
-                                <th>Total</th>
-                                <th>{{total}}</th>
                                 <th></th>
-                            </tr>                            
+                                <th>Iva 15%</th>
+                                <th>${{(total*0.15).toFixed(2)}}</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>Total</th>
+                                <th>${{(total+(total*0.15)).toFixed(2)}}</th>
+                                <th></th>
+                            </tr>
                         </tbody>
                     </table>
-                    <div class="row">
-                        <div class="col-1"></div>
-                        <input type="button" class="btn btn-primary col-10 my-5 py-3" value="Generar Factura" (click)="IrFactura()">
-                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1"></div>
+                    <input type="button" class="btn btn-primary col-10 py-3" value="Generar Factura"
+                        (click)="IrFactura()">
                 </div>
             </div>
         </div>
         <div class="overlay" *ngIf="buscarClientes">
-            <app-buscar-cliente (cerrar)="buscarClientes=$event" (clienteFacturar)="cliente=$event"></app-buscar-cliente>
+            <app-buscar-cliente (cerrar)="buscarClientes=$event"
+                (clienteFacturar)="cliente=$event"></app-buscar-cliente>
         </div>
         <div class="overlay" *ngIf="buscarProductos">
-            <app-buscar-productos (cerrar)="buscarProductos=$event" [listaProductos]="listaProductos" (productosRegresar)="actualizarProductosFiltrados($event)"></app-buscar-productos>
+            <app-buscar-productos (cerrar)="buscarProductos=$event" [listaProductos]="listaProductos"
+                (productosRegresar)="actualizarProductosFiltrados($event)"></app-buscar-productos>
         </div>

@@ -64,7 +64,7 @@ export class DetFacturas{
 }
 //Another Entities
 export class ProductosOrden {    
-    constructor(Id_Pro:number, Nombre:string, Marca:string, Precio:number, Stock:number, Cantidad:number ){
+    constructor(Id_Pro:number, Nombre:string, Marca:string, Precio:number, Stock:number, Cantidad:number, subtotal?:number ){
         this.Id_Pro=Id_Pro;
         this.Nombre=Nombre;
         this.Nombre=Nombre;
@@ -72,8 +72,8 @@ export class ProductosOrden {
         this.Precio=Precio;
         this.Stock=Stock;
         this.Cantidad=Cantidad;
-        this.Subtotal=this.Cantidad*this.Precio
-    }
+        this.Subtotal=subtotal!=undefined?subtotal:this.Cantidad*this.Precio
+    }    
     Id_Pro: number = 0;
     Nombre: string = "";
     Precio: number = 0;
@@ -82,3 +82,28 @@ export class ProductosOrden {
     Cantidad:number=0;
     Subtotal:number=this.Cantidad*this.Precio;
 }
+
+export class FacturaVista {    
+    constructor(Id_Fac:number, Fecha:string, Cliente:string, Monto:number){
+        this.Id_Fac=Id_Fac;
+        this.Cliente=Cliente;        
+        this.Fecha=Fecha
+        // this.Fecha='/Date(' + new Date(Fecha).getTime() + ')/';
+        this.Monto=Monto;        
+    }    
+    Id_Fac: number = 0;
+    Cliente: string = "";
+    Monto: number = 0;
+    Fecha: string = "";    
+}
+    export class Reporte {
+        constructor() {
+    
+        }
+        compraAlta: number = 0;
+        compraBaja: number = 0
+        clienteBaja: string = ""
+        clienteAlta: string = ""
+        ListaDescriptores:string[]=[]
+        ListaValores:number[]=[]    
+    }

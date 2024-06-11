@@ -7,55 +7,62 @@ import { Productos } from '../../Models/Entities.model';
   templateUrl: './buscar-productos.component.html',
   styleUrl: './buscar-productos.component.scss'
 })
-export class BuscarProductosComponent implements OnInit{
+export class BuscarProductosComponent implements OnInit {
   @Output() cerrar = new EventEmitter<boolean>();
   @Output() productosRegresar = new EventEmitter<Productos[]>();
   @Input() listaProductos: Productos[] = []
-  listaProductosFiltrados: Productos[]=[]
+  listaProductosFiltrados: Productos[] = []
   seleccionBuscar: string = '1';
-  filtro:string='';
+  filtro: string = '';
+  buscarPorId:boolean=false
+  p: number = 1;
 
 
   constructor(public sFacturas: SFacturasService) { }
   ngOnInit(): void {
-    this.listaProductosFiltrados=this.listaProductos;
+    this.listaProductosFiltrados = this.listaProductos;
   }
 
   BuscarProductos() {
-    try {
-      switch (this.seleccionBuscar) {
-        case '1':
-          this.listaProductosFiltrados=this.listaProductos.filter(x=>x.Id_Pro==parseInt(this.filtro));
-          break;
-        case '2':
-          this.listaProductosFiltrados=this.listaProductos.filter(x=>x.Nombre==this.filtro);
-          break;
-        case '3':
-          this.listaProductosFiltrados=this.listaProductos.filter(x=>x.Marca==this.filtro);
-          break;
-        case '4':
-          this.listaProductosFiltrados=this.listaProductos.filter(x=>x.Precio==parseFloat(this.filtro));
-          break;            
-      }  
-    } catch (error) {
-      alert('Por favor inserte los datos en el formato correcto.');
+    if (this.buscarPorId) {
+      this.listaProductosFiltrados = this.listaProductos.filter(x => x.Id_Pro == parseInt(this.filtro))
+    } else {
+      this.listaProductosFiltrados = this.listaProductos.filter(x => x.Id_Pro == parseInt(this.filtro)
+        || x.Nombre.toLowerCase().includes(this.filtro.toLowerCase()) || x.Marca.toLowerCase().includes(this.filtro.toLowerCase())
+        || x.Precio == parseFloat(this.filtro))
     }
-    
   }
 
-  actualizarEstadoProducto(idProducto:number, evento: Event,){    
-        const inputElement = evento.target as HTMLInputElement;
-        var index = this.listaProductos.findIndex(producto => producto.Id_Pro == idProducto);        
-        if (inputElement.checked) {
-          this.listaProductos[index].Seleccionado=true;
-        }else{
-          this.listaProductos[index].Seleccionado=false;
-        }
+  actualizarEstadoProducto(idProducto: number, evento: Event,) {
+    const inputElement = evento.target as HTMLInputElement;
+    var index = this.listaProductos.findIndex(producto => producto.Id_Pro == idProducto);
+    if (inputElement.checked) {
+      this.listaProductos[index].Seleccionado = true;
+    } else {
+      this.listaProductos[index].Seleccionado = false;
+    }
   }
 
-  enviarProductos(){
+  enviarProductos() {
     this.productosRegresar.emit(this.listaProductos);
     this.cerrar.emit(false);
   }
-  
+
+  EliminarProducto(id_pro: number) {
+    this.sFacturas.eliminarProducto(id_pro).subscribe(
+      elimino => {
+        if (elimino) {
+          alert('Producto eliminado con exito')
+          this.ngOnInit();
+        } else {
+          alert('No se pudo eliminar al producto porque esta referenciado en una factura')
+        }
+      },
+      error => {
+        console.log(error)
+        alert('Ocurrio un problema inesperado')
+      }
+    )
+  }
+
 }

@@ -1,4 +1,3 @@
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 <div id="body">
     <div class="page-content container bg-white">
         <div class="page-header text-blue-d2">
@@ -51,7 +50,7 @@
                             </div>
                             <div class="text-grey-m2">
                                 <div class="my-1">
-                                    {{cliente?.Ciudad}} - Ecuador
+                                    {{cliente?.Ciudad}} - ECUADOR
                                 </div>
                                 <div class="my-1"><i class="fa fa-phone fa-flip-horizontal text-secondary"></i> <b
                                         class="text-600"> {{cliente?.Telefono}}</b></div>
@@ -70,37 +69,13 @@
                                         class="text-600 text-90">ID:</span> {{factura?.Id_Fac}}</div>
     
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
-                                        class="text-600 text-90">Fecha de emisión:</span> {{factura?.Fecha}}</div>
+                                        class="text-600 text-90">Fecha de emisión:</span> {{factura!=undefined?convertirFecha(factura.Fecha):'no hay'}}</div>
     
                             </div>
-                        </div>
-                        <!-- /.col -->
+                        </div>                        
                     </div>
     
                     <div class="mt-4">  
-                        <!-- <div class="row text-600 text-white bgc-default-tp1 py-25">
-                            <div class="d-none d-sm-block col-1">#</div>
-                            <div class="col-9 col-sm-5">Producto</div>
-                            <div class="d-none d-sm-block col-4 col-sm-2">Cantidad</div>
-                            <div class="d-none d-sm-block col-sm-2">Precio Unitario</div>
-                            <div class="col-2">Sub Total</div>
-                        </div>
-    
-                        <div class="text-95 text-secondary-d3">
-                            <div class="row mb-2 mb-sm-0 py-25">
-                                <div class="d-none d-sm-block col-1">1</div>
-                                <div class="col-9 col-sm-5">Cepillo de dientes</div>
-                                <div class="d-none d-sm-block col-2">2</div>
-                                <div class="d-none d-sm-block col-2 text-95">$10</div>
-                                <div class="col-2 text-secondary-d2">$20</div>
-                            </div>
-    
-                        </div> -->
-    
-                        <!-- <div class="row border-b-2 brc-default-l2"></div> -->
-    
-                        <!-- or use a table instead -->
-    
                         <div class=" table-responsive">
                             <table class="table table-striped border-0 border-b-2 brc-default-l1">
                                 <thead class="">
@@ -114,17 +89,34 @@
                                 </thead>
     
                                 <tbody class="text-95 text-secondary-d3">
-                                    <tr *ngFor="let detalle of detFactura">
-                                        <td>{{detalle.Id_Det_Fac}}</td>
-                                        <td>{{obtenerProducto(detalle.Id_Pro_Per,true)}}</td>
+                                    <tr *ngFor="let detalle of detFactura, index as i">
+                                        <td>{{i+1}}</td>
+                                        <td>{{detalle.Nombre}}</td>
                                         <td>{{detalle.Cantidad}}</td>
-                                        <td class="text-95">${{obtenerProducto(detalle.Id_Pro_Per,false)}}</td>
+                                        <td class="text-95">${{detalle.Precio}}</td>
                                         <td class="text-secondary-d2">${{detalle.Subtotal}}</td>
                                     </tr>                                    
                                 </tbody>
                             </table>
                         </div>
-    
+                        
+                        <div class="row">
+                            <div class="col-12 col-sm-8 text-grey-d2 text-95">
+                            </div>
+
+                            <div class="col-12 col-sm-4 text-grey text-90 order-first order-sm-last">
+                                <div class="row my-1 align-items-center bgc-primary-l3 p-2">
+                                    <div class="col-7 text-right">
+                                        <strong>
+                                            Iva 15%:
+                                        </strong>
+                                    </div>
+                                    <div class="col-5" *ngIf="factura">
+                                        <span class="text-150 text-success-d3 opacity-2">${{(factura.Total*0.15).toFixed(2)}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
     
                         <div class="row">
                             <div class="col-12 col-sm-8 text-grey-d2 text-95">
@@ -137,8 +129,9 @@
                                             Total
                                         </strong>
                                     </div>
-                                    <div class="col-5">
-                                        <span class="text-150 text-success-d3 opacity-2">${{factura?.Total}}</span>
+                                    <div class="col-5" *ngIf="factura">
+                                        <span class="text-150 text-success-d3 opacity-2">${{((factura.Total)+(factura.Total*0.15)).toFixed(2)}}</span>
+
                                     </div>
                                 </div>
                             </div>
@@ -148,7 +141,7 @@
     
                         <div>
                             <span class="text-secondary-d1 text-105">Gracias por la compra</span>
-                            <a href="/home" class="btn btn-outline-success btn-bold px-4 float-right mt-3 mt-lg-0 mx-1">Regresar</a>
+                            <a href="/verFacturas" class="btn btn-outline-success btn-bold px-4 float-right mt-3 mt-lg-0 mx-1">Salir</a>
                         </div>
                     </div>
                 </div>

@@ -7,7 +7,7 @@
     color:#fff;
     border-radius: 10px;
     padding: 30px 40px;
-    margin: auto auto;    
+    margin: auto auto;        
     
 }
 .con1{
@@ -16,4 +16,16 @@
     justify-content: center;
     align-items: center;
     margin-top:5% ;
+}
+.overFlow{
+    max-height:40vh; 
+    overflow-y: auto;
+}
+
+.barra{        
+    color: #000;
+    background: radial-gradient(#a8a8a8,#ffffff);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 17px;
+    /* border: 3px solid #fff; */
 }

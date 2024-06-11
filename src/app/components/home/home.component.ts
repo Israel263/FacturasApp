@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SFacturasService } from '../../services/sfacturas.service';
-import { Clientes, Productos, ProductosOrden } from '../../Models/Entities.model';
+import { Clientes, DetFacturas, Productos, ProductosOrden } from '../../Models/Entities.model';
 import { Router } from '@angular/router';
 import { BuscarClienteComponent } from '../buscar-cliente/buscar-cliente.component';
+import { error } from 'node:console';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,14 @@ export class HomeComponent implements OnInit {
   buscarClientes: boolean = false;
   buscarProductos: boolean = false;
   cliente?: Clientes;
+  numeroOrden:number=0
+ fechaActual = new Date();
 
+ dia = this.fechaActual.getDate();
+ mes = this.fechaActual.getMonth() + 1; // Los meses en JavaScript son 0-indexados
+ anio = this.fechaActual.getFullYear();
+
+ fechaFormateada = `${this.dia}/${this.mes}/${this.anio}`;
   constructor(private sFacturas: SFacturasService, private ruta: Router) { }
 
   ngOnInit(): void {
@@ -25,6 +33,12 @@ export class HomeComponent implements OnInit {
       .subscribe(
         productosRetornados => {
           this.listaProductos = productosRetornados.filter(x => x.Stock > 0);
+        }
+      )
+      this.sFacturas.listarFacturas()
+      .subscribe(
+        facturas=>{
+          this.numeroOrden=facturas.reduce((max, factura) => (factura.Id_Fac > max ? factura.Id_Fac : max), facturas[0].Id_Fac);
         }
       )
   }
@@ -66,21 +80,22 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  controlarProductoStock(indiceProducto:number){
-    if (this.listaProductosOrden[indiceProducto].Cantidad>this.listaProductosOrden[indiceProducto].Stock) {
-      this.listaProductosOrden[indiceProducto].Cantidad=1
+  controlarProductoStock(indiceProducto: number) {
+    if (this.listaProductosOrden[indiceProducto].Cantidad > this.listaProductosOrden[indiceProducto].Stock) {
+      this.listaProductosOrden[indiceProducto].Cantidad = 1
       alert('Por favor ingrese una cantidad de acorde al stock')
     }
-    if (this.listaProductosOrden[indiceProducto].Cantidad<1) {      
-      this.listaProductosOrden[indiceProducto].Cantidad=1;
-    }
+    if (this.listaProductosOrden[indiceProducto].Cantidad < 1) {
+      this.listaProductosOrden[indiceProducto].Cantidad = 1;
+      alert('Ingrese un numero mayor a cero')
+    }    
   }
 
   actualizarProductosFiltrados(listaProd: Productos[]) {
     this.listaProductos = listaProd
     this.listaProductos.filter(x => x.Seleccionado == true).forEach(
       producto => {
-        var indice = this.listaProductosOrden.findIndex(x => x.Id_Pro == producto.Id_Pro)        
+        var indice = this.listaProductosOrden.findIndex(x => x.Id_Pro == producto.Id_Pro)
         if (indice == -1) {
           this.listaProductosOrden.push(new ProductosOrden(producto.Id_Pro, producto.Nombre, producto.Marca, producto.Precio, producto.Stock, 1));
         }
@@ -99,9 +114,80 @@ export class HomeComponent implements OnInit {
     this.actualizarTotal();
   }
 
-  IrFactura(){
-    this.ruta.navigate(['/factura'])
+  IrFactura() {
+    try {
+      if (this.cliente) {        
+        if (this.listaProductosOrden.length == 0) {
+          alert('Minimo debe existir un producto para realizar la factura')
+        } else {          
+          this.sFacturas.crearFactura(this.cliente.Id_Cli).subscribe(
+            numeroFactura => {
+              if (numeroFactura > 0) {
+                this.GuardarDetalles(numeroFactura);
+              }
+              //else{
+              //   alert('La factura no fue creada, no se encuntra disponible el servidor en este momento')
+              // }
+            },
+            error=>{
+              alert('Factura no realizada, intentelo mas tarde')
+              console.log(error)
+            }
+          );
+        }
+      } else {
+        alert('Por favor escoja un cliente para hacer la factura')
+      }
+    } catch (error) {
+      alert('Ha ocurrido un error al generar la factura')
+      console.log(error);
+    }
+
   }
 
+  GuardarDetalles(id_fac: number) {
+
+    var listaDetFacturas: DetFacturas[] = []
+    this.listaProductosOrden.forEach(orden => {
+      listaDetFacturas.push(new DetFacturas(0, id_fac, orden.Id_Pro, orden.Cantidad, orden.Subtotal))
+    }
+    );
+    this.sFacturas.InsertarProductos(listaDetFacturas).subscribe(
+      estado => {
+        if (estado < 0) {
+          alert('El stock de un producto se ha acabado antes de ingresar la factura, por lo cual se ha cancelado la factura');
+          console.log('Estado al crear los detalles factura: ' + estado)
+          this.BorrarFactura(id_fac);
+          this.ngOnInit()
+          this.listaProductosOrden = []
+        } else {
+          this.ruta.navigate(['/factura/' + id_fac])
+        }
+      }
+    )    
+  }
+
+  BorrarFactura(id_fac: number) {
+    this.sFacturas.EliminarFactura(id_fac).subscribe(
+      elimino => {
+        if (elimino) {
+          console.log('Se ha eliminado con exito')
+        } else
+          console.log('No se ha podido eliminar la factura tras el error')
+      }
+    )
+  }
+
+  validarInput(event: KeyboardEvent, stock:number, orden:ProductosOrden) {      
+    if (!isNaN(parseInt(event.key))) {
+      // var auxCantidad= parseInt(orden.Cantidad.toString()+event.key)      
+      // if (parseInt(event.key)==0 ) {
+      //   event.preventDefault();     
+      // }
+    }else{
+      event.preventDefault();   
+    }
+    
+  }
 
 }

@@ -30,14 +30,14 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let cli of listaFiltradaClientes | paginate: { itemsPerPage: 4, currentPage: p }" class="fila">
-                            <th scope="row">{{cli.Id_Cli}}</th>
-                            <th>{{cli.Cedula}}</th>
-                            <th>{{cli.Nombre}}</th>
-                            <th>{{cli.Apellido}}</th>
-                            <th>{{cli.Ciudad}}</th>
-                            <th>{{cli.Telefono}}</th>
+                            <th scope="row">{{cli.usuarioID}}</th>
+                            <th>{{cli.cedula}}</th>
+                            <th>{{cli.nombre}}</th>
+                            <th>{{cli.apellido}}</th>
+                            <th>{{cli.direccion}}</th>
+                            <th>{{cli.telefono}}</th>
                             <th><input type="radio" name="listadoCli" [value]="cli" [(ngModel)]="clienteSeleccionado"></th>
-                            <th><i class="bi bi-trash btn btn-danger h6" (click)="EliminarCliente(cli.Id_Cli)"></i></th>
+                            <th><i class="bi bi-trash btn btn-danger h6" (click)="EliminarCliente(cli.usuarioID)"></i></th>
                         </tr>
                     </tbody>
                 </table>

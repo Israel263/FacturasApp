@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Clientes, Reporte } from '../../Models/Entities.model';
+import { Usuarios, Reporte } from '../../Models/Entities.model';
 import Chart from 'chart.js/auto';
 import { SFacturasService } from '../../services/sfacturas.service';
 import { Router } from '@angular/router';
@@ -16,7 +16,7 @@ export class ReportesComponent implements OnInit{
     this.ObtenerReporte(1);  
   }
   reporte:Reporte=new Reporte();  
-  listaClientes:Clientes[]=[];
+  listaClientes:Usuarios[]=[];
   chart: any;
   chart2: any;
   chartPai:number=0
@@ -31,7 +31,7 @@ ObtenerReporte(eleccion:number){
       this.ObtenerCliente(parseInt(reporte.clienteAlta), true)
       this.ObtenerCliente(parseInt(reporte.clienteBaja), false)
       this.reporte.ListaDescriptores.forEach(cliente=>{
-        var cli: string|undefined=this.listaClientes.find(x=>x.Id_Cli==parseInt(cliente))?.Nombre
+        var cli: string|undefined=this.listaClientes.find(x=>x.usuarioID==parseInt(cliente))?.nombre
         if (cli) {          
             var indice=this.reporte.ListaDescriptores.findIndex(x=>x==cliente)            
             this.reporte.ListaDescriptores[indice]=cli            
@@ -48,15 +48,15 @@ ObtenerReporte(eleccion:number){
 }
 
 ObtenerCliente(id_cli: number, alta:boolean) {
-  this.sFacturas.retornarClientes().subscribe(
+  this.sFacturas.retornarUsuarios().subscribe(
     clientesRetornados => {
       this.listaClientes=clientesRetornados;
       if (clientesRetornados && clientesRetornados.length > 0) {
-        var cli: Clientes | undefined = clientesRetornados.find(x => x.Id_Cli === id_cli);
+        var cli: Usuarios | undefined = clientesRetornados.find(x => x.usuarioID === id_cli);
         if (cli && alta) {          
-          this.reporte.clienteAlta = cli.Nombre+ " "+ cli.Apellido;
+          this.reporte.clienteAlta = cli.nombre+ " "+ cli.apellido;
         }else if(cli && !alta){
-          this.reporte.clienteBaja = cli.Nombre+ " "+ cli.Apellido;
+          this.reporte.clienteBaja = cli.nombre+ " "+ cli.apellido;
         }
       }
     },

@@ -1,12 +1,15 @@
 <div id="DeFondo">
     <h1 class="text-warning text-center m-5 font-weight-bold">SISTEMA DE FACTURACION</h1>
     <div class='contenedor'>
-        <form>
-            <h2>Ingreso al Sistema</h2>
-            <p>Seleccione la opcion que desea ejecutar:</p>
-            <button type="button" id="btnFacturar" (click)="ruta.navigateByUrl('/home')">Facturar</button>
-            <button type="button" id="btnVerFacturas" (click)="ruta.navigateByUrl('/verFacturas')">Ver Facturas</button>
-            <button type="button" id="btnReportes" (click)="ruta.navigateByUrl('/reportes')">Ver Reporte</button>
+        <form #formularioLogin="ngForm" (ngSubmit)="login(formularioLogin)">
+            <h2>Ingreso al Sistema</h2>                        
+            <div class='input-box'>
+                <input class="" type="text" maxlength="30" placeholder='Usuario' name="usuario" required ngModel/>
+            </div>            
+            <div class='input-box'>
+                <input class="" type="password" maxlength="30" placeholder='Contraseña' name="contraseña" required ngModel/>
+            </div>
+            <button type="submit" id="botonLogin">Ingresar</button>
             <div class='registrarse'>                
                 <p>¿No es cliente? <a  href="/registrarCliente" id="registrar">Registrarse</a></p>
             </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SFacturasService } from '../../services/sfacturas.service';
-import { Clientes, DetFacturas, Facturas, Productos, ProductosOrden } from '../../Models/Entities.model';
+import { Usuarios, DetOrdenes, Orden, Productos, ProductosOrden } from '../../Models/Entities.model';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -17,8 +17,8 @@ export class FacturaComponent implements OnInit {
   };
 
   id_factura: number = 0
-  factura?: Facturas
-  cliente?: Clientes
+  factura?: Orden
+  cliente?: Usuarios
   detFactura: ProductosOrden[] = []  
   listaProductos: Productos[]=[]
 
@@ -26,7 +26,7 @@ export class FacturaComponent implements OnInit {
     this.sFactura.retornarFactura(this.id_factura).subscribe(
       facturaRecibida => {
         this.factura = facturaRecibida
-        this.ObtenerCliente(this.factura.Id_Cli_Per)
+        this.ObtenerCliente(this.factura.clienteID)
         this.obtenerDetalleFacturas(this.id_factura);
       }
     )
@@ -34,24 +34,24 @@ export class FacturaComponent implements OnInit {
     
 
   ObtenerCliente(id_cli: number) {
-    this.sFactura.retornarClientes().subscribe(
+    this.sFactura.retornarUsuarios().subscribe(
       clientesRetornados => {
-        this.cliente = clientesRetornados.find(x => x.Id_Cli == id_cli)
+        this.cliente = clientesRetornados.find(x => x.usuarioID == id_cli)
       }
     )
   }
 
   obtenerDetalleFacturas(id_Factura: number) {
-    this.sFactura.retornarDetalles(id_Factura).subscribe(
-      detallesRetornados => {
-        detallesRetornados.forEach(
-          detalle=>{            
-            this.detFactura.push(new ProductosOrden(detalle.Id_Pro_Per,'','',0,0,detalle.Cantidad,detalle.Subtotal))
-          }          
-        )
-        this.obtenerProducto()
-      }
-    )
+    // this.sFactura.retornarDetalles(id_Factura).subscribe(
+    //   detallesRetornados => {
+    //     detallesRetornados.forEach(
+    //       detalle=>{            
+    //         this.detFactura.push(new ProductosOrden(detalle.productoID,'',0,0,detalle.cantidad, detalle.subtotal))
+    //       }          
+    //     )
+    //     this.obtenerProducto()
+    //   }
+    // )
   }
 
   obtenerProducto() {    
@@ -66,11 +66,10 @@ export class FacturaComponent implements OnInit {
   asignarDatosProductos(){
     this.detFactura.forEach(
       detalleFac=>{
-        var indice = this.listaProductos.findIndex(x => x.Id_Pro == detalleFac.Id_Pro)
-        detalleFac.Nombre=this.listaProductos[indice].Nombre
-        detalleFac.Marca=this.listaProductos[indice].Marca
-        detalleFac.Precio=this.listaProductos[indice].Precio
-        detalleFac.Stock=this.listaProductos[indice].Stock
+        var indice = this.listaProductos.findIndex(x => x.idProducto == detalleFac.Id_Pro)
+        detalleFac.Nombre=this.listaProductos[indice].nombre        
+        detalleFac.Precio=this.listaProductos[indice].precio
+        detalleFac.Stock=this.listaProductos[indice].stock
       }
     )
   }

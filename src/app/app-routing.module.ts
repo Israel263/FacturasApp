@@ -6,15 +6,16 @@ import { HomeComponent } from './components/home/home.component';
 import { FacturaComponent } from './components/factura/factura.component';
 import { VerFacturasComponent } from './components/ver-facturas/ver-facturas.component';
 import { ReportesComponent } from './components/reportes/reportes.component';
+import { LoginGuardian } from './components/login/login-guardian';
 
 const routes: Routes = [
   {path:'', redirectTo:'/login', pathMatch:'full'},
   {path:'login', component: LoginComponent, pathMatch:'full'},
   {path:'registrarCliente', component: RegistrarClienteComponent, pathMatch:'full'},
-  {path:'home', component: HomeComponent, pathMatch:'full'},
-  {path:'factura/:id', component: FacturaComponent, pathMatch:'full'},
-  {path:'verFacturas', component: VerFacturasComponent, pathMatch:'full'},
-  {path:'reportes', component: ReportesComponent, pathMatch:'full'},
+  {path:'home', component: HomeComponent, pathMatch:'full', canActivate:[LoginGuardian]},
+  {path:'factura/:id', component: FacturaComponent, pathMatch:'full', canActivate:[LoginGuardian]},
+  {path:'verFacturas', component: VerFacturasComponent, pathMatch:'full', canActivate:[LoginGuardian]},
+  {path:'reportes', component: ReportesComponent, pathMatch:'full', canActivate:[LoginGuardian]}
 ];
 
 @NgModule({

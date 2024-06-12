@@ -25,17 +25,16 @@ export class BuscarProductosComponent implements OnInit {
 
   BuscarProductos() {
     if (this.buscarPorId) {
-      this.listaProductosFiltrados = this.listaProductos.filter(x => x.Id_Pro == parseInt(this.filtro))
+      this.listaProductosFiltrados = this.listaProductos.filter(x => x.idProducto == parseInt(this.filtro))
     } else {
-      this.listaProductosFiltrados = this.listaProductos.filter(x => x.Id_Pro == parseInt(this.filtro)
-        || x.Nombre.toLowerCase().includes(this.filtro.toLowerCase()) || x.Marca.toLowerCase().includes(this.filtro.toLowerCase())
-        || x.Precio == parseFloat(this.filtro))
+      this.listaProductosFiltrados = this.listaProductos.filter(x => x.idProducto == parseInt(this.filtro)
+        || x.nombre.toLowerCase().includes(this.filtro.toLowerCase()) || x.precio == parseFloat(this.filtro))
     }
   }
 
   actualizarEstadoProducto(idProducto: number, evento: Event,) {
     const inputElement = evento.target as HTMLInputElement;
-    var index = this.listaProductos.findIndex(producto => producto.Id_Pro == idProducto);
+    var index = this.listaProductos.findIndex(producto => producto.idProducto == idProducto);
     if (inputElement.checked) {
       this.listaProductos[index].Seleccionado = true;
     } else {
@@ -49,20 +48,20 @@ export class BuscarProductosComponent implements OnInit {
   }
 
   EliminarProducto(id_pro: number) {
-    this.sFacturas.eliminarProducto(id_pro).subscribe(
-      elimino => {
-        if (elimino) {
-          alert('Producto eliminado con exito')
-          this.ngOnInit();
-        } else {
-          alert('No se pudo eliminar al producto porque esta referenciado en una factura')
-        }
-      },
-      error => {
-        console.log(error)
-        alert('Ocurrio un problema inesperado')
-      }
-    )
+    // this.sFacturas.eliminarProducto(id_pro).subscribe(
+    //   elimino => {
+    //     if (elimino) {
+    //       alert('Producto eliminado con exito')
+    //       this.ngOnInit();
+    //     } else {
+    //       alert('No se pudo eliminar al producto porque esta referenciado en una factura')
+    //     }
+    //   },
+    //   error => {
+    //     console.log(error)
+    //     alert('Ocurrio un problema inesperado')
+    //   }
+    // )
   }
 
 }

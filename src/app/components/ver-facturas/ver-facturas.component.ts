@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SFacturasService } from '../../services/sfacturas.service';
-import { FacturaVista, Facturas } from '../../Models/Entities.model';
+import { FacturaVista, Orden } from '../../Models/Entities.model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -19,7 +19,7 @@ export class VerFacturasComponent implements OnInit {
   p:number=1
 
   ngOnInit(): void {
-    this.sFacturas.listarFacturas().subscribe(
+    this.sFacturas.listarOrdenes().subscribe(
       facturasDevueltas => {
         facturasDevueltas.forEach(
           fac => {
@@ -32,11 +32,11 @@ export class VerFacturasComponent implements OnInit {
     )
   }
 
-  insertarFactura(fac: Facturas) {
-    this.sFacturas.retornarClientes().subscribe(
+  insertarFactura(fac: Orden) {
+    this.sFacturas.retornarUsuarios().subscribe(
       clientes => {
-        var nombreCliente = clientes.find(x => x.Id_Cli == fac.Id_Cli_Per)?.Nombre + ' ' + clientes.find(x => x.Id_Cli == fac.Id_Cli_Per)?.Apellido          
-        this.listaFacturas.push(new FacturaVista(fac.Id_Fac, fac.Fecha, nombreCliente, fac.Total))
+        var nombreCliente = clientes.find(x => x.usuarioID == fac.clienteID)?.nombre + ' ' + clientes.find(x => x.usuarioID == fac.clienteID)?.apellido          
+        this.listaFacturas.push(new FacturaVista(fac.ordenID, fac.fechaVenta.toDateString(), nombreCliente, fac.totalVenta))
       }
     )
   }
@@ -83,19 +83,19 @@ export class VerFacturasComponent implements OnInit {
   }
 
   eliminarFactura(id_fac:number){
-    this.sFacturas.EliminarFactura(id_fac).subscribe(
-      elimino=>{
-        if (elimino) {
-          alert('Factura eliminada con exito')          
-        }else{
-          alert('No se ha podido eliminar la factura')
-        }
-      },
-      error=>{
-        alert('Ha ocurrido un error inesperado')
-        console.log(error)
-      }
-    )
+    // this.sFacturas.EliminarFactura(id_fac).subscribe(
+    //   elimino=>{
+    //     if (elimino) {
+    //       alert('Factura eliminada con exito')          
+    //     }else{
+    //       alert('No se ha podido eliminar la factura')
+    //     }
+    //   },
+    //   error=>{
+    //     alert('Ha ocurrido un error inesperado')
+    //     console.log(error)
+    //   }
+    // )
   }
 
 }

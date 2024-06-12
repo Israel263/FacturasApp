@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SFacturasService } from '../../services/sfacturas.service';
-import { Clientes, DetFacturas, Productos, ProductosOrden } from '../../Models/Entities.model';
+import { Usuarios, DetOrdenes, Productos, ProductosOrden } from '../../Models/Entities.model';
 import { Router } from '@angular/router';
 import { BuscarClienteComponent } from '../buscar-cliente/buscar-cliente.component';
 import { error } from 'node:console';
@@ -17,7 +17,7 @@ export class HomeComponent implements OnInit {
   total: number = 0;
   buscarClientes: boolean = false;
   buscarProductos: boolean = false;
-  cliente?: Clientes;
+  cliente?: Usuarios;
   numeroOrden:number=0
  fechaActual = new Date();
 
@@ -32,13 +32,13 @@ export class HomeComponent implements OnInit {
     this.sFacturas.retornarProductos()
       .subscribe(
         productosRetornados => {
-          this.listaProductos = productosRetornados.filter(x => x.Stock > 0);
+          this.listaProductos = productosRetornados.filter(x => x.stock > 0);
         }
       )
-      this.sFacturas.listarFacturas()
+      this.sFacturas.listarOrdenes()
       .subscribe(
         facturas=>{
-          this.numeroOrden=facturas.reduce((max, factura) => (factura.Id_Fac > max ? factura.Id_Fac : max), facturas[0].Id_Fac);
+          this.numeroOrden=facturas.reduce((max, factura) => (factura.ordenID > max ? factura.ordenID : max), facturas[0].ordenID);
         }
       )
   }
@@ -46,8 +46,8 @@ export class HomeComponent implements OnInit {
     const inputElement = evento.target as HTMLInputElement;
     if (inputElement.checked) {
       this.listaProductos.filter(x => x.Seleccionado).forEach(producto => {
-        if (!this.listaProductosOrden.find(x => x.Id_Pro == producto.Id_Pro)) {
-          this.listaProductosOrden.push(new ProductosOrden(producto.Id_Pro, producto.Nombre, producto.Marca, producto.Precio, producto.Stock, 1));
+        if (!this.listaProductosOrden.find(x => x.Id_Pro == producto.idProducto)) {
+          this.listaProductosOrden.push(new ProductosOrden(producto.idProducto, producto.nombre, producto.precio, producto.stock, 1));
         }
       });
     } else {
@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit {
   }
   eliminarProductoOrden(id: number) {
     const index = this.listaProductosOrden.findIndex(producto => producto.Id_Pro === id);
-    const indexProducts = this.listaProductos.findIndex(producto => producto.Id_Pro === id);
+    const indexProducts = this.listaProductos.findIndex(producto => producto.idProducto === id);
     this.listaProductosOrden.splice(index, 1);
     this.listaProductos[indexProducts].Seleccionado = false;
     this.listaProductosOrden = [...this.listaProductosOrden];
@@ -95,15 +95,15 @@ export class HomeComponent implements OnInit {
     this.listaProductos = listaProd
     this.listaProductos.filter(x => x.Seleccionado == true).forEach(
       producto => {
-        var indice = this.listaProductosOrden.findIndex(x => x.Id_Pro == producto.Id_Pro)
+        var indice = this.listaProductosOrden.findIndex(x => x.Id_Pro == producto.idProducto)
         if (indice == -1) {
-          this.listaProductosOrden.push(new ProductosOrden(producto.Id_Pro, producto.Nombre, producto.Marca, producto.Precio, producto.Stock, 1));
+          this.listaProductosOrden.push(new ProductosOrden(producto.idProducto, producto.nombre, producto.precio, producto.stock, 1));
         }
       }
     );
     if (this.listaProductos.filter(x => x.Seleccionado == true).length != this.listaProductosOrden.length) {
       this.listaProductosOrden.forEach(productoOrden => {
-        var indice = this.listaProductos.filter(x => x.Seleccionado == true).findIndex(x => x.Id_Pro == productoOrden.Id_Pro)
+        var indice = this.listaProductos.filter(x => x.Seleccionado == true).findIndex(x => x.idProducto == productoOrden.Id_Pro)
         if (indice == -1) {
           var indiceAux = this.listaProductosOrden.findIndex(x => x.Id_Pro == productoOrden.Id_Pro)
           this.listaProductosOrden.splice(indiceAux, 1);
@@ -120,20 +120,20 @@ export class HomeComponent implements OnInit {
         if (this.listaProductosOrden.length == 0) {
           alert('Minimo debe existir un producto para realizar la factura')
         } else {          
-          this.sFacturas.crearFactura(this.cliente.Id_Cli).subscribe(
-            numeroFactura => {
-              if (numeroFactura > 0) {
-                this.GuardarDetalles(numeroFactura);
-              }
-              //else{
-              //   alert('La factura no fue creada, no se encuntra disponible el servidor en este momento')
-              // }
-            },
-            error=>{
-              alert('Factura no realizada, intentelo mas tarde')
-              console.log(error)
-            }
-          );
+          // this.sFacturas.crearOrden(this.cliente.usuarioID).subscribe(
+          //   numeroFactura => {
+          //     if (numeroFactura > 0) {
+          //       this.GuardarDetalles(numeroFactura);
+          //     }
+          //     //else{
+          //     //   alert('La factura no fue creada, no se encuntra disponible el servidor en este momento')
+          //     // }
+          //   },
+          //   error=>{
+          //     alert('Factura no realizada, intentelo mas tarde')
+          //     console.log(error)
+          //   }
+          // );
         }
       } else {
         alert('Por favor escoja un cliente para hacer la factura')
@@ -147,9 +147,9 @@ export class HomeComponent implements OnInit {
 
   GuardarDetalles(id_fac: number) {
 
-    var listaDetFacturas: DetFacturas[] = []
+    var listaDetFacturas: DetOrdenes[] = []
     this.listaProductosOrden.forEach(orden => {
-      listaDetFacturas.push(new DetFacturas(0, id_fac, orden.Id_Pro, orden.Cantidad, orden.Subtotal))
+      listaDetFacturas.push(new DetOrdenes(0, id_fac, orden.Id_Pro, orden.Cantidad, orden.Subtotal))
     }
     );
     this.sFacturas.InsertarProductos(listaDetFacturas).subscribe(
@@ -168,14 +168,14 @@ export class HomeComponent implements OnInit {
   }
 
   BorrarFactura(id_fac: number) {
-    this.sFacturas.EliminarFactura(id_fac).subscribe(
-      elimino => {
-        if (elimino) {
-          console.log('Se ha eliminado con exito')
-        } else
-          console.log('No se ha podido eliminar la factura tras el error')
-      }
-    )
+    // this.sFacturas.EliminarFactura(id_fac).subscribe(
+    //   elimino => {
+    //     if (elimino) {
+    //       console.log('Se ha eliminado con exito')
+    //     } else
+    //       console.log('No se ha podido eliminar la factura tras el error')
+    //   }
+    // )
   }
 
   validarInput(event: KeyboardEvent, stock:number, orden:ProductosOrden) {      

@@ -37,13 +37,13 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let product of listaProductos">
-                                <th scope="row">{{product.Id_Pro}}</th>
-                                <th>{{product.Nombre}}</th>
-                                <th>{{product.Stock}}</th>
-                                <th>${{product.Precio.toFixed(2)}}</th>
+                                <th scope="row">{{product.idProducto}}</th>
+                                <th>{{product.nombre}}</th>
+                                <th>{{product.stock}}</th>
+                                <th>${{product.precio.toFixed(2)}}</th>
                                 <th><input type="checkbox" name="selecProd" id="" value="1"
                                         [(ngModel)]="product.Seleccionado"
-                                        (change)="actualizarOrdenVenta($event, product.Id_Pro)"></th>
+                                        (change)="actualizarOrdenVenta($event, product.idProducto)"></th>
                             </tr>
                         </tbody>
                     </table>
@@ -56,11 +56,11 @@
                 <h6 class="text-white mx-5 my-1 col-4">Orden N: #00{{numeroOrden+1}} </h6>
                 <h6 class="text-white mx-5 my-1 col-4">Fecha: {{fechaFormateada}}</h6>
                 <h6 class="text-white text-justify m-1 mx-5 my-1"><strong>Cliente: </strong> {{cliente==null?'No se ha seleccionado
-                    un cliente':''}} {{cliente?.Nombre}} {{cliente?.Apellido}}</h6>
+                    un cliente':''}} {{cliente?.nombre}} {{cliente?.apellido}}</h6>
                     <div *ngIf="cliente" class="row">
-                        <h6 class="text-white mx-5 my-1 col-4"><strong>Cedula: </strong> {{cliente.Cedula}} </h6>
-                        <h6 class="text-white mx-5 my-1 col-4"><strong>Ciudad: </strong> {{cliente.Ciudad}} - Ecuador</h6>
-                        <h6 class="text-white mx-5 my-1"><strong>Telefono: </strong> {{cliente.Telefono}} </h6>
+                        <h6 class="text-white mx-5 my-1 col-4"><strong>Cedula: </strong> {{cliente.cedula}} </h6>
+                        <h6 class="text-white mx-5 my-1 col-4"><strong>Ciudad: </strong> {{cliente.direccion}} - Ecuador</h6>
+                        <h6 class="text-white mx-5 my-1"><strong>Telefono: </strong> {{cliente.telefono}} </h6>
                     </div>
             </div>
             <h6 class=" text-white text-center mt-3 mb-1">Aquí puede editar los productos a comprar</h6>

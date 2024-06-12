@@ -19,8 +19,7 @@
                     <thead>
                         <tr class="filaPrincipal">
                             <th scope="col">Id</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Marca</th>
+                            <th scope="col">Nombre</th>                            
                             <th scope="col">Stock</th>                            
                             <th scope="col">Precio</th>
                             <th></th>
@@ -29,13 +28,12 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let productoFiltrado of listaProductosFiltrados | paginate: { itemsPerPage: 4, currentPage: p }" class="fila">
-                            <th scope="row">{{productoFiltrado.Id_Pro}}</th>
-                            <th>{{productoFiltrado.Nombre}}</th>
-                            <th>{{productoFiltrado.Marca}}</th>
-                            <th>{{productoFiltrado.Stock}}</th>                            
-                            <th>{{productoFiltrado.Precio.toFixed(2)}}</th>
-                            <th><input type="checkbox" name="listadoProd" (change)="actualizarEstadoProducto(productoFiltrado.Id_Pro, $event)" [(ngModel)]="productoFiltrado.Seleccionado"></th>
-                            <th><i class="bi bi-trash btn btn-danger h6" (click)="EliminarProducto(productoFiltrado.Id_Pro)"></i></th>
+                            <th scope="row">{{productoFiltrado.idProducto}}</th>
+                            <th>{{productoFiltrado.nombre}}</th>                            
+                            <th>{{productoFiltrado.stock}}</th>                            
+                            <th>{{productoFiltrado.precio.toFixed(2)}}</th>
+                            <th><input type="checkbox" name="listadoProd" (change)="actualizarEstadoProducto(productoFiltrado.idProducto, $event)" [(ngModel)]="productoFiltrado.Seleccionado"></th>
+                            <th><i class="bi bi-trash btn btn-danger h6" (click)="EliminarProducto(productoFiltrado.idProducto)"></i></th>
                         </tr>
                     </tbody>
                 </table>

@@ -4,7 +4,7 @@
             <h1 class="page-title text-secondary-d1">
                 Factura
                 <small class="page-info">
-                    : {{factura?.Id_Fac}}
+                    : {{factura?.ordenID}}
                 </small>
             </h1>
     
@@ -42,18 +42,18 @@
                         <div class="col-sm-4">
                             <div>
                                 <span class="text-sm text-grey-m2 align-middle">Cliente: </span>
-                                <span class="text-600 text-110 text-blue align-middle">{{cliente?.Nombre}} {{cliente?.Apellido}}</span>
+                                <span class="text-600 text-110 text-blue align-middle">{{cliente?.nombre}} {{cliente?.apellido}}</span>
                             </div>
                             <div>
                                 <span class="text-sm text-grey-m2 align-middle">Ruc: </span>
-                                <span class="text-600 text-110 text-blue align-middle">{{cliente?.Cedula}}</span>
+                                <span class="text-600 text-110 text-blue align-middle">{{cliente?.cedula}}</span>
                             </div>
                             <div class="text-grey-m2">
                                 <div class="my-1">
-                                    {{cliente?.Ciudad}} - ECUADOR
+                                    {{cliente?.direccion}} - ECUADOR
                                 </div>
                                 <div class="my-1"><i class="fa fa-phone fa-flip-horizontal text-secondary"></i> <b
-                                        class="text-600"> {{cliente?.Telefono}}</b></div>
+                                        class="text-600"> {{cliente?.telefono}}</b></div>
                             </div>
                         </div>
                         <!-- /.col -->
@@ -66,10 +66,10 @@
                                 </div>
     
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
-                                        class="text-600 text-90">ID:</span> {{factura?.Id_Fac}}</div>
+                                        class="text-600 text-90">ID:</span> {{factura?.ordenID}}</div>
     
                                 <div class="my-2"><i class="fa fa-circle text-blue-m2 text-xs mr-1"></i> <span
-                                        class="text-600 text-90">Fecha de emisión:</span> {{factura!=undefined?convertirFecha(factura.Fecha):'no hay'}}</div>
+                                        class="text-600 text-90">Fecha de emisión:</span> {{factura!=undefined?convertirFecha(factura.fechaVenta.toDateString()):'no hay'}}</div>
     
                             </div>
                         </div>                        
@@ -112,7 +112,7 @@
                                         </strong>
                                     </div>
                                     <div class="col-5" *ngIf="factura">
-                                        <span class="text-150 text-success-d3 opacity-2">${{(factura.Total*0.15).toFixed(2)}}</span>
+                                        <span class="text-150 text-success-d3 opacity-2">${{(factura.totalVenta*0.15).toFixed(2)}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -130,8 +130,7 @@
                                         </strong>
                                     </div>
                                     <div class="col-5" *ngIf="factura">
-                                        <span class="text-150 text-success-d3 opacity-2">${{((factura.Total)+(factura.Total*0.15)).toFixed(2)}}</span>
-
+                                        <span class="text-150 text-success-d3 opacity-2">${{((factura.totalVenta)+(factura.totalVenta*0.15)).toFixed(2)}}</span>
                                     </div>
                                 </div>
                             </div>

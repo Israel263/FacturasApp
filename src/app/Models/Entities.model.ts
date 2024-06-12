@@ -1,74 +1,77 @@
 import { CANCELLED } from "dns";
 
-export class Clientes {    
-    constructor(Id_Cli:number,Cedula:string, Nombre:string, Apellido:string, Ciudad:string, Telefono:string ){
-        this.Id_Cli=Id_Cli;
-        this.Cedula=Cedula;
-        this.Nombre=Nombre;
-        this.Apellido=Apellido;
-        this.Ciudad=Ciudad;
-        this.Telefono=Telefono;
+export class Usuarios {    
+    constructor(Id_Cli:number,Cedula:string, Nombre:string, Apellido:string, Ciudad:string, Telefono:string, fechaNacimiento:Date, rolID:number){
+        this.usuarioID=Id_Cli;
+        this.cedula=Cedula;
+        this.nombre=Nombre;
+        this.apellido=Apellido;
+        this.direccion=Ciudad;
+        this.telefono=Telefono;
+        this.fechaNacimiento=fechaNacimiento;
+        this.rolID=rolID;
     }
-    Id_Cli: number = 0;
-    Cedula: string = ""
-    Nombre: string = "";
-    Apellido: string = "";
-    Ciudad: string = "";
-    Telefono: string = "";    
+    usuarioID: number = 0;
+    cedula: string = ""
+    nombre: string = "";
+    apellido: string = "";
+    direccion: string = "";
+    telefono: string = "";
+    fechaNacimiento: Date;
+    rolID:number=0;
 }
 export class Productos {    
     constructor(Id_Pro:number, Nombre:string, Marca:string, Precio:number, Stock:number ){
-        this.Id_Pro=Id_Pro;
-        this.Nombre=Nombre;        
-        this.Marca=Marca;
-        this.Precio=Precio;
-        this.Stock=Stock;
+        this.idProducto=Id_Pro;
+        this.nombre=Nombre;        
+        this.precio=Precio;
+        this.stock=Stock;
     }
-    Id_Pro: number = 0;
-    Nombre: string = "";
-    Precio: number = 0;
-    Marca: string = "";
-    Stock: number = 0;
+    idProducto: number = 0;
+    nombre: string = "";
+    precio: number = 0;    
+    stock: number = 0;
     Seleccionado:boolean=false;
 }
 
-export class Facturas{
-    constructor(id_Fac:number,id_Cli_Per:number,fecha:string,total:number)
+export class Orden{
+    constructor(id_Fac:number,id_Cli_Per:number,fecha:Date,total:number, estado:string)
         {
-            this.Id_Fac = id_Fac;
-            this.Id_Cli_Per = id_Cli_Per;
-            this.Fecha = '/Date(' + new Date(fecha).getTime() + ')/';
-            this.Total = total;
+            this.ordenID = id_Fac;
+            this.clienteID = id_Cli_Per;
+            this.fechaVenta = fecha;
+            this.totalVenta = total;
+            this.estado=estado;
         }
         
-        Id_Fac:number=0;
-        Id_Cli_Per:number=0;
-        Fecha:string="";
-        Total:number=0;
+        ordenID:number=0;
+        clienteID:number=0;
+        fechaVenta:Date;
+        totalVenta:number=0;
+        estado:string="";
 }
 
-export class DetFacturas{
+export class DetOrdenes{
     constructor(id_Det_Fac:number,id_Fac_Per:number,id_Pro_Per:number,cantidad:number,subtotal:number)
         {
-            this.Id_Det_Fac=id_Det_Fac;
-            this.Id_Fac_Per = id_Fac_Per;
-            this.Id_Pro_Per = id_Pro_Per;
-            this.Cantidad = cantidad;
-            this.Subtotal = subtotal;
+            this.detalleID=id_Det_Fac;
+            this.ordenID = id_Fac_Per;
+            this.productoID = id_Pro_Per;
+            this.cantidad = cantidad;
+            this.subtotal = subtotal;
         }
-        Id_Det_Fac:number=0;
-        Id_Fac_Per:number=0;
-        Id_Pro_Per:number=0;
-        Cantidad:number=0;
-        Subtotal:number=0;        
+        detalleID:number=0;
+        ordenID:number=0;
+        productoID:number=0;
+        cantidad:number=0;
+        subtotal:number=0;        
 }
 //Another Entities
 export class ProductosOrden {    
-    constructor(Id_Pro:number, Nombre:string, Marca:string, Precio:number, Stock:number, Cantidad:number, subtotal?:number ){
+    constructor(Id_Pro:number, Nombre:string, Precio:number, Stock:number, Cantidad:number, subtotal?:number ){
         this.Id_Pro=Id_Pro;
         this.Nombre=Nombre;
-        this.Nombre=Nombre;
-        this.Marca=Marca;
+        this.Nombre=Nombre;        
         this.Precio=Precio;
         this.Stock=Stock;
         this.Cantidad=Cantidad;
@@ -76,8 +79,7 @@ export class ProductosOrden {
     }    
     Id_Pro: number = 0;
     Nombre: string = "";
-    Precio: number = 0;
-    Marca: string = "";
+    Precio: number = 0;    
     Stock: number = 0;
     Cantidad:number=0;
     Subtotal:number=this.Cantidad*this.Precio;

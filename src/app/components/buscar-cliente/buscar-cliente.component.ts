@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Clientes } from '../../Models/Entities.model';
+import { Usuarios } from '../../Models/Entities.model';
 import { SFacturasService } from '../../services/sfacturas.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { SFacturasService } from '../../services/sfacturas.service';
 export class BuscarClienteComponent implements OnInit {
   constructor(public sFacturas: SFacturasService) { }
   ngOnInit(): void {
-    this.sFacturas.retornarClientes()
+    this.sFacturas.retornarUsuarios()
       .subscribe(
         clientesRetornados => {
           this.listaCompletaClientes = clientesRetornados
@@ -20,29 +20,29 @@ export class BuscarClienteComponent implements OnInit {
   }
 
   @Output() cerrar = new EventEmitter<boolean>();
-  @Output() clienteFacturar = new EventEmitter<Clientes>();
-  clienteSeleccionado?: Clientes;
+  @Output() clienteFacturar = new EventEmitter<Usuarios>();
+  clienteSeleccionado?: Usuarios;
   seleccionBuscar: string = '1';
-  listaCompletaClientes: Clientes[] = []
-  listaFiltradaClientes: Clientes[] = [];
+  listaCompletaClientes: Usuarios[] = []
+  listaFiltradaClientes: Usuarios[] = [];
   filtro: string = ''
   buscarPorId:boolean=false
   p: number = 1;
 
-  EnviarCliente(cliente: Clientes) {
+  EnviarCliente(cliente: Usuarios) {
     this.clienteFacturar.emit(cliente);
   }
 
   BuscarClientes() {    
     if (this.buscarPorId) {
-      this.listaFiltradaClientes = this.listaCompletaClientes.filter(x => x.Id_Cli==parseInt(this.filtro))
+      this.listaFiltradaClientes = this.listaCompletaClientes.filter(x => x.usuarioID==parseInt(this.filtro))
     }else{
       this.listaFiltradaClientes = this.listaCompletaClientes.filter( 
-      x=>x.Nombre.toLowerCase().includes(this.filtro.toLowerCase()) ||
-      x.Id_Cli==parseInt(this.filtro) ||
-      x.Apellido.toLowerCase().includes(this.filtro.toLowerCase()) || 
-      x.Cedula.includes(this.filtro) || x.Ciudad.toLowerCase().includes(this.filtro.toLowerCase()) || 
-      x.Telefono.includes(this.filtro))
+      x=>x.nombre.toLowerCase().includes(this.filtro.toLowerCase()) ||
+      x.usuarioID==parseInt(this.filtro) ||
+      x.apellido.toLowerCase().includes(this.filtro.toLowerCase()) || 
+      x.cedula.includes(this.filtro) || x.direccion.toLowerCase().includes(this.filtro.toLowerCase()) || 
+      x.telefono.includes(this.filtro))
     }
   }
   AceptarCliente() {
@@ -55,19 +55,19 @@ export class BuscarClienteComponent implements OnInit {
   }
 
   EliminarCliente(id_cli: number) {
-    this.sFacturas.eliminarCliente(id_cli).subscribe(
-      elimino => {
-        if (elimino) {
-          alert('Cliente eliminado con exito')
-          this.ngOnInit();
-        } else {
-          alert('No se pudo eliminar al cliente porque esta referenciado en una factura')
-        }
-      },
-      error => {
-        console.log(error)
-        alert('Ocurrio un prblema inesperado')
-      }
-    )
+    // this.sFacturas.eliminarCliente(id_cli).subscribe(
+    //   elimino => {
+    //     if (elimino) {
+    //       alert('Cliente eliminado con exito')
+    //       this.ngOnInit();
+    //     } else {
+    //       alert('No se pudo eliminar al cliente porque esta referenciado en una factura')
+    //     }
+    //   },
+    //   error => {
+    //     console.log(error)
+    //     alert('Ocurrio un prblema inesperado')
+    //   }
+    // )
   }
 }

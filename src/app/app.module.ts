@@ -14,6 +14,9 @@ import { FacturaComponent } from './components/factura/factura.component';
 import { VerFacturasComponent } from './components/ver-facturas/ver-facturas.component';
 import { ReportesComponent } from './components/reportes/reportes.component';
 import {NgxPaginationModule} from 'ngx-pagination';
+import { LoginService } from './components/login/login.service';
+import { CookieService } from 'ngx-cookie-service';
+import { LoginGuardian } from './components/login/login-guardian';
 
 @NgModule({
   declarations: [
@@ -36,7 +39,10 @@ import {NgxPaginationModule} from 'ngx-pagination';
     NgxPaginationModule
   ],
   providers: [
-    provideClientHydration()
+    provideClientHydration(),
+    LoginService,
+    CookieService,
+    LoginGuardian
   ],
   bootstrap: [AppComponent]
 })

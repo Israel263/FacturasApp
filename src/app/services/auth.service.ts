@@ -1,19 +1,22 @@
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import  firebase from 'firebase/compat/app'
-import 'firebase/compat/auth'
+import { Injectable } from '@angular/core';
+import {Auth, signInWithEmailAndPassword, getIdToken, signOut, createUserWithEmailAndPassword} from '@angular/fire/auth'
+import { Router } from '@angular/router';
 import { CookieService } from "ngx-cookie-service";
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthService {
 
-@ Injectable()
-export class LoginService{
+  constructor(private router: Router, private cookies:CookieService, private auth:Auth){};
 
-    constructor(private router: Router, private cookies:CookieService){};
-
-    token:string='';
+  register (email:string, password:string){
+    return createUserWithEmailAndPassword(this.auth, email, password);
+  }
+  token:string='';
     login(email:string, contraseña:string){
-        firebase.auth().signInWithEmailAndPassword(email,contraseña).then(
-            correcto=>{
-                firebase.auth().currentUser?.getIdToken().then(
+        signInWithEmailAndPassword(this.auth, email,contraseña).then(
+            correcto=>{                
+                getIdToken(correcto.user).then(
                     token=>{
                         this.token=token;
                         this.cookies.set("token",this.token);
@@ -33,7 +36,7 @@ export class LoginService{
     }
 
     cerrarSesion(){
-        firebase.auth().signOut().then(()=>{
+        signOut(this.auth).then(()=>{
             this.token='';
             this.cookies.set("token",this.token);
             this.router.navigate(['/']);

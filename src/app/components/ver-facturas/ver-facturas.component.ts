@@ -20,23 +20,31 @@ export class VerFacturasComponent implements OnInit {
 
   ngOnInit(): void {
     this.sFacturas.listarOrdenes().subscribe(
-      facturasDevueltas => {
-        facturasDevueltas.forEach(
-          fac => {
-            this.insertarFactura(fac);                        
-          }
-        )
-        this.listaFacturas=this.listaFacturas.reverse()
-        this.facturasFiltradas=this.listaFacturas
+      respuesta => {
+        if (respuesta.esCorrecto) {
+          Object.values(respuesta.valor).forEach(
+            fac => {
+              this.insertarFactura(fac);                        
+            }
+          )
+          this.listaFacturas=this.listaFacturas.reverse()
+          this.facturasFiltradas=this.listaFacturas 
+        }else{
+
+        }        
       }
     )
   }
 
   insertarFactura(fac: Orden) {
     this.sFacturas.retornarUsuarios().subscribe(
-      clientes => {
-        var nombreCliente = clientes.find(x => x.usuarioID == fac.clienteID)?.nombre + ' ' + clientes.find(x => x.usuarioID == fac.clienteID)?.apellido          
-        this.listaFacturas.push(new FacturaVista(fac.ordenID, fac.fechaVenta.toDateString(), nombreCliente, fac.totalVenta))
+      respuesta => {
+        if (respuesta.esCorrecto) {
+          var nombreCliente = Object.values(respuesta.valor).find(x => x.usuarioID == fac.clienteID)?.nombre + ' ' + Object.values(respuesta.valor).find(x => x.usuarioID == fac.clienteID)?.apellido          
+          this.listaFacturas.push(new FacturaVista(fac.ordenID, fac.fechaVenta.toString(), nombreCliente, fac.totalVenta)) 
+        }else{
+          console.log(respuesta.mensaje);
+        }
       }
     )
   }

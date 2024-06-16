@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SFacturasService } from '../../services/sfacturas.service';
-import { Usuarios, DetOrdenes, Productos, ProductosOrden } from '../../Models/Entities.model';
+import { Usuarios, DetOrdenes, Productos, ProductosOrden, Orden } from '../../Models/Entities.model';
 import { Router } from '@angular/router';
-import { BuscarClienteComponent } from '../buscar-cliente/buscar-cliente.component';
-import { error } from 'node:console';
 
 @Component({
   selector: 'app-home',
@@ -18,27 +16,40 @@ export class HomeComponent implements OnInit {
   buscarClientes: boolean = false;
   buscarProductos: boolean = false;
   cliente?: Usuarios;
-  numeroOrden:number=0
- fechaActual = new Date();
+  numeroOrden: number = 0
+  fechaActual = new Date();
+  orden = new Orden(0, 0, 0, 'Abierta');
 
- dia = this.fechaActual.getDate();
- mes = this.fechaActual.getMonth() + 1; // Los meses en JavaScript son 0-indexados
- anio = this.fechaActual.getFullYear();
+  dia = this.fechaActual.getDate();
+  mes = this.fechaActual.getMonth() + 1; // Los meses en JavaScript son 0-indexados
+  anio = this.fechaActual.getFullYear();
 
- fechaFormateada = `${this.dia}/${this.mes}/${this.anio}`;
+  fechaFormateada = `${this.dia}/${this.mes}/${this.anio}`;
   constructor(private sFacturas: SFacturasService, private ruta: Router) { }
 
   ngOnInit(): void {
     this.sFacturas.retornarProductos()
       .subscribe(
-        productosRetornados => {
-          this.listaProductos = productosRetornados.filter(x => x.stock > 0);
+        respuesta => {
+          if (respuesta.esCorrecto) {
+            this.listaProductos = Object.values(respuesta.valor).filter(x => x.stock > 0);
+          } else {
+            console.log(respuesta.mensaje);
+          }
         }
       )
-      this.sFacturas.listarOrdenes()
+    this.sFacturas.listarOrdenes()
       .subscribe(
-        facturas=>{
-          this.numeroOrden=facturas.reduce((max, factura) => (factura.ordenID > max ? factura.ordenID : max), facturas[0].ordenID);
+        respuesta => {
+          if (respuesta.esCorrecto) {
+            if (Object.values(respuesta.valor).length > 0) {
+              this.numeroOrden = Object.values(respuesta.valor).reduce((max, factura) => (factura.ordenID > max ? factura.ordenID : max), Object.values(respuesta.valor)[0].ordenID);
+            } else {
+              this.numeroOrden = 1;
+            }
+          } else {
+            console.log(respuesta.mensaje);
+          }
         }
       )
   }
@@ -88,7 +99,7 @@ export class HomeComponent implements OnInit {
     if (this.listaProductosOrden[indiceProducto].Cantidad < 1) {
       this.listaProductosOrden[indiceProducto].Cantidad = 1;
       alert('Ingrese un numero mayor a cero')
-    }    
+    }
   }
 
   actualizarProductosFiltrados(listaProd: Productos[]) {
@@ -116,24 +127,31 @@ export class HomeComponent implements OnInit {
 
   IrFactura() {
     try {
-      if (this.cliente) {        
+      if (this.cliente) {
         if (this.listaProductosOrden.length == 0) {
           alert('Minimo debe existir un producto para realizar la factura')
-        } else {          
-          // this.sFacturas.crearOrden(this.cliente.usuarioID).subscribe(
-          //   numeroFactura => {
-          //     if (numeroFactura > 0) {
-          //       this.GuardarDetalles(numeroFactura);
-          //     }
-          //     //else{
-          //     //   alert('La factura no fue creada, no se encuntra disponible el servidor en este momento')
-          //     // }
-          //   },
-          //   error=>{
-          //     alert('Factura no realizada, intentelo mas tarde')
-          //     console.log(error)
-          //   }
-          // );
+        } else {
+          var listaDetFacturas: DetOrdenes[] = []
+          listaDetFacturas=this.listaProductosOrden.map(orden => 
+            new DetOrdenes(0, 0, orden.Id_Pro, orden.Cantidad, orden.Subtotal));
+
+          this.orden = new Orden(0, this.cliente.usuarioID, this.total, 'Cerrada',listaDetFacturas);
+
+          this.sFacturas.crearOrden(this.orden).subscribe(
+            respuesta => {
+              if (respuesta.esCorrecto) {
+                this.ruta.navigate(['/factura/' + respuesta.valor])
+              }
+              else{
+                 alert('La factura no fue creada, se ha encontrado un error')
+                 console.log(respuesta.mensaje);
+               }
+            },
+            error=>{
+              alert('Factura no realizada, intentelo mas tarde')
+              console.log(error)
+            }
+          );
         }
       } else {
         alert('Por favor escoja un cliente para hacer la factura')
@@ -142,7 +160,6 @@ export class HomeComponent implements OnInit {
       alert('Ha ocurrido un error al generar la factura')
       console.log(error);
     }
-
   }
 
   GuardarDetalles(id_fac: number) {
@@ -164,7 +181,7 @@ export class HomeComponent implements OnInit {
           this.ruta.navigate(['/factura/' + id_fac])
         }
       }
-    )    
+    )
   }
 
   BorrarFactura(id_fac: number) {
@@ -178,16 +195,16 @@ export class HomeComponent implements OnInit {
     // )
   }
 
-  validarInput(event: KeyboardEvent, stock:number, orden:ProductosOrden) {      
+  validarInput(event: KeyboardEvent, stock: number, orden: ProductosOrden) {
     if (!isNaN(parseInt(event.key))) {
       // var auxCantidad= parseInt(orden.Cantidad.toString()+event.key)      
       // if (parseInt(event.key)==0 ) {
       //   event.preventDefault();     
       // }
-    }else{
-      event.preventDefault();   
+    } else {
+      event.preventDefault();
     }
-    
+
   }
 
 }

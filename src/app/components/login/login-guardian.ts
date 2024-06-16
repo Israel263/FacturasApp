@@ -1,14 +1,14 @@
-import { ActivatedRouteSnapshot, CanActivate, GuardResult, MaybeAsync, Router, RouterStateSnapshot } from "@angular/router";
-import { LoginService } from "./login.service";
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from "@angular/router";
 import {  Injectable } from "@angular/core";
+import { AuthService } from "../../services/auth.service";
 
 @Injectable()
 export class LoginGuardian implements CanActivate{
 
-    constructor(private loginService:LoginService, private router:Router){}
+    constructor(private authenticationService:AuthService, private router:Router){}
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        if(this.loginService.estaLogeado()){
+        if(this.authenticationService.estaLogeado()){
             return true;
         }else{
             this.router.navigateByUrl('/login');

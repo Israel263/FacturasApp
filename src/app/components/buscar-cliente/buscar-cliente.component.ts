@@ -12,9 +12,13 @@ export class BuscarClienteComponent implements OnInit {
   ngOnInit(): void {
     this.sFacturas.retornarUsuarios()
       .subscribe(
-        clientesRetornados => {
-          this.listaCompletaClientes = clientesRetornados
-          this.listaFiltradaClientes = this.listaCompletaClientes
+        respuesta => {
+          if (respuesta.esCorrecto) {
+            this.listaCompletaClientes = Object.values(respuesta.valor);
+            this.listaFiltradaClientes = this.listaCompletaClientes
+          }else{
+            console.log(respuesta.mensaje);
+          }
         }
       )
   }

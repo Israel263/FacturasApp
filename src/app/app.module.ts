@@ -18,6 +18,9 @@ import { LoginGuardian } from './components/login/login-guardian';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
+import { ProductosComponent } from './components/productos/productos.component';
+import { EditarImagenesComponent } from './components/editar-imagenes/editar-imagenes.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +31,9 @@ import { getDatabase, provideDatabase } from '@angular/fire/database';
     BuscarProductosComponent,
     FacturaComponent,
     VerFacturasComponent,
-    ReportesComponent
+    ReportesComponent,
+    ProductosComponent,
+    EditarImagenesComponent
   ],
   imports: [
     BrowserModule,

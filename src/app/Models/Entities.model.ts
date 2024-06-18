@@ -25,7 +25,7 @@ export class Usuarios {
     Activo: boolean = true;
 }
 export class Productos {
-    constructor(Id_Pro: number, Nombre: string, Marca: string, Precio: number, Stock: number) {
+    constructor(Id_Pro: number, Nombre: string, Precio: number, Stock: number) {
         this.idProducto = Id_Pro;
         this.nombre = Nombre;
         this.precio = Precio;
@@ -123,4 +123,15 @@ export class Respuesta {
     esCorrecto: boolean = false
     valor: Object = new Object();
     mensaje: string = ""
+}
+
+export class ImgsProductos {
+    constructor(idImagen: number, idProPer: number, imagen: string) {
+        this.idImagen = idImagen;
+        this.idProPer = idProPer;
+        this.imagen = imagen;
+    }
+    idImagen: number = 0;
+    idProPer: number = 0;    
+    imagen: string = "";
 }

@@ -1,0 +1,55 @@
+<div class="row">
+    <h3>PRODUCTOS</h3>
+    <div class="col-6">
+        <form>            
+            <div>
+                <label>Producto</label>
+                <input type="text">
+            </div>
+            <div>
+                <label>Precio</label>
+                <input type="number">
+            </div>
+            <div>
+                <label>Stock</label>
+                <input type="number">
+            </div>
+            <div>
+                <label>Descontinuado</label>
+                <select name="" id="">
+                    <option>Si</option>
+                    <option>No</option>
+                </select>
+            </div>
+            <div>
+                <input class="btn btn-primary" type="button" value="Editar Imagenes" (click)="abrirImagenes=true">
+            </div>
+            <input class="btn btn-danger" type="button" value="Crear">
+        </form>
+    </div>
+    <div class="col-6">
+        <table class="table table-hover my-3">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Producto</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Descontinuado</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let produc of productos">
+                    <th>{{produc.idProducto}}</th>
+                    <th>{{produc.nombre}}</th>
+                    <th>{{produc.precio}}</th>
+                    <th>{{produc.stock}}</th>
+                    <th>{{produc.Seleccionado==true?'si':'no'}}</th>
+                </tr>                             
+            </tbody>
+        </table>        
+    </div>
+</div>
+<div class="overlay" *ngIf="abrirImagenes">
+    <app-editar-imagenes (abrirModal)="abrirImagenes=$event"></app-editar-imagenes>
+</div>

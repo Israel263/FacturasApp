@@ -2,27 +2,27 @@ export class Usuarios {
     constructor(Id_Cli: number, Cedula: string, Nombre: string, Apellido: string, Ciudad: string, Telefono: string, fechaNacimiento: Date, email: string, password: string, rolID: number) {
         this.usuarioID = Id_Cli;
         this.cedula = Cedula;
-        this.Email = email;
-        this.Password = password;
+        this.email = email;
+        this.password = password;
         this.nombre = Nombre;
         this.apellido = Apellido;
         this.direccion = Ciudad;
         this.telefono = Telefono;
-        this.fechaNacimiento = fechaNacimiento;
+        this.fechaNacimiento = fechaNacimiento.toISOString();
         this.rolID = rolID;
-        this.Activo = true;
+        this.activo = true;
     }
     usuarioID: number = 0;
-    Email: string = "";
-    Password: string = "";
+    email: string = "";
+    password: string = "";
     cedula: string = ""
     nombre: string = "";
     apellido: string = "";
     direccion: string = "";
     telefono: string = "";
-    fechaNacimiento: Date;
+    fechaNacimiento: string='';
     rolID: number = 0;
-    Activo: boolean = true;
+    activo: boolean = true;
 }
 export class Productos {
     constructor(Id_Pro: number, Nombre: string, Precio: number, Stock: number) {
@@ -36,6 +36,8 @@ export class Productos {
     precio: number = 0;
     stock: number = 0;
     Seleccionado: boolean = false;
+    descontinuado:boolean=false;
+    listaImgs:ImgsProductos[]=[]
 }
 
 export class Orden {
@@ -134,4 +136,10 @@ export class ImgsProductos {
     idImagen: number = 0;
     idProPer: number = 0;    
     imagen: string = "";
+}
+
+export class Logs{
+    tabla:string=''
+    error:string=''
+    fechaHora:Date=new Date(Date.now())
 }

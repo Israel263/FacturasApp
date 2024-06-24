@@ -25,7 +25,6 @@
                             <th scope="col">Ciudad</th>
                             <th scope="col">Telefono</th>
                             <th></th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,8 +35,7 @@
                             <th>{{cli.apellido}}</th>
                             <th>{{cli.direccion}}</th>
                             <th>{{cli.telefono}}</th>
-                            <th><input type="radio" name="listadoCli" [value]="cli" [(ngModel)]="clienteSeleccionado"></th>
-                            <th><i class="bi bi-trash btn btn-danger h6" (click)="EliminarCliente(cli.usuarioID)"></i></th>
+                            <th><input type="radio" name="listadoCli" [value]="cli" [(ngModel)]="clienteSeleccionado"></th>                            
                         </tr>
                     </tbody>
                 </table>

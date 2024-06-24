@@ -9,12 +9,13 @@ import { SFacturasService } from '../../services/sfacturas.service';
 })
 export class BuscarClienteComponent implements OnInit {
   constructor(public sFacturas: SFacturasService) { }
+
   ngOnInit(): void {
     this.sFacturas.retornarUsuarios()
       .subscribe(
         respuesta => {
           if (respuesta.esCorrecto) {
-            this.listaCompletaClientes = Object.values(respuesta.valor);
+            this.listaCompletaClientes = Object.values(respuesta.valor).filter((x:Usuarios)=>x.rolID==4);
             this.listaFiltradaClientes = this.listaCompletaClientes
           }else{
             console.log(respuesta.mensaje);
@@ -58,20 +59,4 @@ export class BuscarClienteComponent implements OnInit {
     }
   }
 
-  EliminarCliente(id_cli: number) {
-    // this.sFacturas.eliminarCliente(id_cli).subscribe(
-    //   elimino => {
-    //     if (elimino) {
-    //       alert('Cliente eliminado con exito')
-    //       this.ngOnInit();
-    //     } else {
-    //       alert('No se pudo eliminar al cliente porque esta referenciado en una factura')
-    //     }
-    //   },
-    //   error => {
-    //     console.log(error)
-    //     alert('Ocurrio un prblema inesperado')
-    //   }
-    // )
-  }
 }

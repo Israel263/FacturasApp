@@ -1,17 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { EditarImagenesComponent } from './editar-imagenes.component';
 
-describe('EditarImagenesComponent', () => {
-  let component: EditarImagenesComponent;
-  let fixture: ComponentFixture<EditarImagenesComponent>;
+import { PerfilComponent } from './perfil.component';
+
+describe('PerfilComponent', () => {
+  let component: PerfilComponent;
+  let fixture: ComponentFixture<PerfilComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [EditarImagenesComponent]
+      declarations: [PerfilComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(EditarImagenesComponent);
+    fixture = TestBed.createComponent(PerfilComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

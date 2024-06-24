@@ -15,22 +15,24 @@
     height: 97vh;
     margin: 0;    
     min-height: 100vh;
-    background:  linear-gradient(to bottom, rgba(255, 255, 255, 0.534), rgba(206, 200, 255, 0.15));    
+    background-color: rgba(255, 255, 255, 0.646);
+    backdrop-filter: blur(10px);
    }
    #headClaro{    
     margin: 0;        
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.872), rgba(206, 200, 255, 0.831));    
+    background: #e1e1e1;
+    min-height: 18vh;
    }
    #ordenVenta{    
     height: 97vh;    
     min-height: 100vh;
-    background: linear-gradient(to bottom, rgba(56, 56, 56, 0.15), rgba(0, 0, 0, 0.718));
-    background-size: cover;
-    background-position: center;
+    background: rgba(46, 46, 46, 0.646);
+    backdrop-filter: blur(10px);
    }
    #headOscuro{    
     margin: 0;        
-    background: linear-gradient(to bottom, rgb(0, 0, 0), rgb(10, 0, 47));        
+    background: #383838;
+    min-height: 18vh;
    }
   #regresar{
     color: rgb(249, 249, 249);;

@@ -5,9 +5,11 @@ import { RegistrarClienteComponent } from './components/registrar-cliente/regist
 import { HomeComponent } from './components/home/home.component';
 import { FacturaComponent } from './components/factura/factura.component';
 import { VerFacturasComponent } from './components/ver-facturas/ver-facturas.component';
-import { ReportesComponent } from './components/reportes/reportes.component';
 import { LoginGuardian } from './components/login/login-guardian';
 import { ProductosComponent } from './components/productos/productos.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { PerfilComponent } from './components/perfil/perfil.component';
+import { LogsComponent } from './components/logs/logs.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'/login', pathMatch:'full'},
@@ -17,7 +19,9 @@ const routes: Routes = [
   {path:'factura/:id', component: FacturaComponent, pathMatch:'full', canActivate:[LoginGuardian]},
   {path:'verFacturas', component: VerFacturasComponent, pathMatch:'full', canActivate:[LoginGuardian]},
   {path:'productos', component: ProductosComponent, pathMatch:'full', canActivate:[LoginGuardian]},
-  {path:'reportes', component: ReportesComponent, pathMatch:'full', canActivate:[LoginGuardian]},
+  {path:'usuarios', component: UsuariosComponent, pathMatch:'full', canActivate:[LoginGuardian]},
+  {path:'perfil', component: PerfilComponent, pathMatch:'full', canActivate:[LoginGuardian]},
+  {path:'logs', component: LogsComponent, pathMatch:'full', canActivate:[LoginGuardian]},
 ];
 
 @NgModule({

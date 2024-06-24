@@ -11,7 +11,6 @@ import { BuscarClienteComponent } from './components/buscar-cliente/buscar-clien
 import { BuscarProductosComponent } from './components/buscar-productos/buscar-productos.component';
 import { FacturaComponent } from './components/factura/factura.component';
 import { VerFacturasComponent } from './components/ver-facturas/ver-facturas.component';
-import { ReportesComponent } from './components/reportes/reportes.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginGuardian } from './components/login/login-guardian';
@@ -20,6 +19,10 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { ProductosComponent } from './components/productos/productos.component';
 import { EditarImagenesComponent } from './components/editar-imagenes/editar-imagenes.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
+import { PerfilComponent } from './components/perfil/perfil.component';
+import { ConfirmarContraseniaComponent } from './components/confirmar-contrasenia/confirmar-contrasenia.component';
+import { LogsComponent } from './components/logs/logs.component';
 
 @NgModule({
   declarations: [
@@ -30,10 +33,13 @@ import { EditarImagenesComponent } from './components/editar-imagenes/editar-ima
     BuscarClienteComponent,
     BuscarProductosComponent,
     FacturaComponent,
-    VerFacturasComponent,
-    ReportesComponent,
+    VerFacturasComponent,    
     ProductosComponent,
-    EditarImagenesComponent
+    EditarImagenesComponent,
+    UsuariosComponent,
+    PerfilComponent,
+    ConfirmarContraseniaComponent,
+    LogsComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +52,7 @@ import { EditarImagenesComponent } from './components/editar-imagenes/editar-ima
   providers: [
     provideClientHydration(),
     CookieService,
-    LoginGuardian, 
+    LoginGuardian,    
     provideFirebaseApp(() => initializeApp({ "projectId": "facturacion-app-5ae81", 
       "appId": "1:895840865278:web:22c83102c32408b4758eaf", "databaseURL": "https://facturacion-app-5ae81-default-rtdb.firebaseio.com", 
       "storageBucket": "facturacion-app-5ae81.appspot.com", "apiKey": "AIzaSyAcC99oteb87cRnrNs11aRI_EUOLIWrFzE", 

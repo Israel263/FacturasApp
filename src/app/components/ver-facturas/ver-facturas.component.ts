@@ -37,7 +37,7 @@ export class VerFacturasComponent implements OnInit {
   }
 
   insertarFactura(fac: Orden) {
-    this.sFacturas.retornarUsuarios().subscribe(
+    this.sFacturas.retornarTodosUsuarios().subscribe(
       respuesta => {
         if (respuesta.esCorrecto) {
           var nombreCliente = Object.values(respuesta.valor).find(x => x.usuarioID == fac.clienteID)?.nombre + ' ' + Object.values(respuesta.valor).find(x => x.usuarioID == fac.clienteID)?.apellido          
@@ -89,6 +89,8 @@ export class VerFacturasComponent implements OnInit {
       return 'fechaError'
     }
   }
+
+  
 
   eliminarFactura(id_fac:number){
     // this.sFacturas.EliminarFactura(id_fac).subscribe(

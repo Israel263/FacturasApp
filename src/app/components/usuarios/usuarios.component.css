@@ -27,7 +27,7 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
   }
   .contenedor {
-    width: 90%;
+    width: 85%;
     background-color: transparent;  
     /* background: linear-gradient(to top, rgba(255, 255, 255, 0.6), rgba(108, 108, 108, 0.2)); */
     border: 2px solid rgba(255, 255, 255, .2);
@@ -45,4 +45,5 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 17px;  
     padding: 0.5em;
+    width: 100%;
 }

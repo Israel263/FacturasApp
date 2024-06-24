@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SFacturasService } from '../../services/sfacturas.service';
 import { Usuarios, DetOrdenes, Orden, Productos, ProductosOrden } from '../../Models/Entities.model';
 import { ActivatedRoute } from '@angular/router';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-factura',
@@ -9,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './factura.component.css'
 })
 export class FacturaComponent implements OnInit {
+
 
   constructor(private sFactura: SFacturasService, private routeActivated: ActivatedRoute) {
     this.routeActivated.params.subscribe(param => {
@@ -39,7 +41,7 @@ export class FacturaComponent implements OnInit {
 
 
   ObtenerCliente(id_cli: number) {
-    this.sFactura.retornarUsuarios().subscribe(
+    this.sFactura.retornarTodosUsuarios().subscribe(
       respuesta => {
         if (respuesta.esCorrecto) {
           this.cliente = Object.values(respuesta.valor).find(x => x.usuarioID == id_cli)
@@ -69,7 +71,7 @@ export class FacturaComponent implements OnInit {
   }
 
   obtenerProducto() {
-    this.sFactura.retornarProductos().subscribe(
+    this.sFactura.retornarProductosSinImagenes().subscribe(
       respuesta => {
         if (respuesta.esCorrecto) {
           this.listaProductos = Object.values(respuesta.valor)
@@ -90,6 +92,7 @@ export class FacturaComponent implements OnInit {
         detalleFac.Stock = this.listaProductos[indice].stock
       }
     )
+    console.log(this.detFactura)
   }
 
   convertirFecha(fecha: string): string {
@@ -104,6 +107,36 @@ export class FacturaComponent implements OnInit {
       return 'fechaError'
     }
   }
+
+  imprimir() {
+    window.print()
+  }
+
+  descargaPDF() {
+    const doc = new jsPDF();
+  
+    // Obtén el elemento con id pdfFactura
+    const element = document.getElementById('pdfFactura');
+  
+    if (element) {
+      // Ajusta el tamaño del PDF según el tamaño del elemento
+      const options = {
+        x: 20,
+        y: 10,
+        html2canvas: { scale: 0.13 }, // Puedes ajustar la escala aquí
+        callback: (doc:jsPDF) => {
+          doc.save(`Factura_${this.factura?.ordenID}.pdf`);
+        }
+      };
+  
+      // Genera el PDF con jsPDF
+      doc.html(element, options);
+    } else {
+      console.error('Elemento con id "pdfFactura" no encontrado.');
+    }
+  }
+  
+  
 
 
 }

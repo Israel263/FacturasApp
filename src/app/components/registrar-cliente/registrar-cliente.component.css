@@ -133,3 +133,7 @@
 #botonLogin:hover{
   background-color: rgb(210, 210, 10);
 }
+
+.validPassword{
+    margin-bottom: 4em;
+}
